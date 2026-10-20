@@ -25,16 +25,16 @@ def print_menu():
     print("8. Quit")
 
 
-def selects_option(user_input):
+def selects_option(user_input, tips_library):
     """Selects the option in the menu"""
     if user_input == 1:
-        add_tip()
+        add_tip(tips_library)
     elif user_input == 2:
         edit_tip()
     elif user_input == 3:
         remove_tip()
     elif user_input == 4:
-        show_all_tips()
+        show_all_tips(tips_library)
     elif user_input == 5:
         search_tips()
     elif user_input == 6:
@@ -47,7 +47,23 @@ def press_enter():
     input("Press Enter to Continue to the Main Menu...")
 
 
-def add_tip():
+def add_tip(tips_library):
+    """Adds the users input for each key value pair into a dictionary then into a list"""
+    tenant = input("\nTenant Name: ")
+    apt = input("\nApartment: ")
+    amnt = float(input("\nAmount: "))
+    tip_type = input("\nType: ")
+    desc = input("\nDescription: ")
+    date = input("\nDate: ")
+    tips = {
+        "Tenant: ": tenant,
+        "Apartment: ": apt,
+        "Amount: ": amnt,
+        "Type: ": tip_type,
+        "Description: ": desc,
+        "Date: ": date,
+    }
+    tips_library.append(tips)
     print("Adding is a work in progress...")
 
 
@@ -59,7 +75,9 @@ def remove_tip():
     print("Removing is a work in progress...")
 
 
-def show_all_tips():
+def show_all_tips(tips_library):
+    """Displays the tips list of dictionaries which include the tips information"""
+    print(tips_library)
     print("Showing all is a work in progress...")
 
 
@@ -77,6 +95,7 @@ def show_tip_total():
 
 def main():
     """Main while loop"""
+    tips_library = []
     title_box()
 
     while True:
@@ -93,7 +112,7 @@ def main():
         if user_input == 8:
             print("Goodbye!")
             break
-        selects_option(user_input)
+        selects_option(user_input, tips_library)
         press_enter()
 
 
