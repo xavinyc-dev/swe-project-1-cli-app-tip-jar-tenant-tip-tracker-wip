@@ -1,7 +1,16 @@
 def title_box():
-    print("+" + "-" * 40 + "+")
-    print("| " + "Welcome to the tip management program." + " |")
-    print("+" + "-" * 40 + "+")
+    """Prints the title with box"""
+    print("                   +" + "-" * 40 + "+")
+    print("                   | " + "Welcome to the tip management program." + " |")
+    print("                   +" + "-" * 40 + "+")
+
+
+def main_menu_box():
+    """Prints the menu with box"""
+    menu = "| " + "Main Menu" + " |"
+    print("*" * len(menu))
+    print(menu)
+    print("*" * len(menu))
 
 
 def print_menu():
@@ -14,6 +23,28 @@ def print_menu():
     print("6. Sort tips (by date or by amount)")
     print("7. Show total tips")
     print("8. Quit")
+
+
+def selects_option(user_input):
+    """Selects the option in the menu"""
+    if user_input == 1:
+        add_tip()
+    elif user_input == 2:
+        edit_tip()
+    elif user_input == 3:
+        remove_tip()
+    elif user_input == 4:
+        show_all_tips()
+    elif user_input == 5:
+        search_tips()
+    elif user_input == 6:
+        sort_tips()
+    elif user_input == 7:
+        show_tip_total()
+
+
+def press_enter():
+    input("Press Enter to Continue to the Main Menu...")
 
 
 def add_tip():
@@ -45,32 +76,25 @@ def show_tip_total():
 
 
 def main():
+    """Main while loop"""
     title_box()
 
     while True:
+        main_menu_box()
+        print()
         print_menu()
-        user_input = input("Choose your option(1 - 8): ")
+        user_input = input("\nChoose your option(1 - 8): ")
+        print()
         if not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
-            print("Please enter a number between 1 and 8.")
+            print("Please enter a number between 1 and 8.\n")
+            press_enter()
             continue
         user_input = int(user_input)
         if user_input == 8:
             print("Goodbye!")
             break
-        if user_input == 1:
-            add_tip()
-        elif user_input == 2:
-            edit_tip()
-        elif user_input == 3:
-            remove_tip()
-        elif user_input == 4:
-            show_all_tips()
-        elif user_input == 5:
-            search_tips()
-        elif user_input == 6:
-            sort_tips()
-        elif user_input == 7:
-            show_tip_total()
+        selects_option(user_input)
+        press_enter()
 
 
 main()
