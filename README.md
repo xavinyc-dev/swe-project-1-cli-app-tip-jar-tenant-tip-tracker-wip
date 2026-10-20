@@ -1,15 +1,53 @@
-What it does: one or two sentences about who it’s for and what problem it solves.
-This app is for any worker that works in apartment building or hotel that has to deal with and organize their tips. Easily view their tips from any specified time. A central area to view and manage the tips you received from who, where, and when. It solves the problem of not knowing how much you got in tips for the year, week, or day, and who you got it from as well as just to visually see it all in a database that is easily searchable easily read and visually appealing
+# Tip Tracker
 
+## Vision
+This app is for any worker in an apartment building or hotel who has to
+keep track of and organize their tips. It gives them one central place to
+view and manage the tips they received: from who, where, and when. It
+solves the problem of not knowing how much you made in tips for the year,
+week, or day, and who you got them from. The long-term goal is a database
+that is easy to search, easy to read, and visually appealing.
 
-What each tip records: for example tenant name, apartment number, amount, tip type (cash, gift card...), and year.
-Each tip records the tenants name if there is one, the apartment, the amount, tip type like cash, card, gift card, physical item, or other, when it happened, 
+## Version 1
+A terminal app for a friend of mine who works in an apartment building.
+You can add, edit, and remove tips, see your total, and search and sort
+your tips. Tips are stored in a list of dictionaries while the program
+runs.
 
+## What each tip records
+- **Tenant name** (optional, can be left blank)
+- **Apartment** (for example `4B`)
+- **Amount** (always a number in dollars; use `0` or an estimated value
+  for physical items)
+- **Type**: cash, card, gift card, physical item, or other
+- **Description** (optional text, for example "bottle of wine" for a
+  physical item, or details for "other")
+- **Date** the tip was received, in the format `YYYY-MM-DD`
+  (for example `2026-12-24`), so tips can be searched by date and yearly
+  totals can be calculated
 
+## Menu options (Version 1)
+1. Add a tip
+2. Edit a tip
+3. Remove a tip
+4. Show all tips
+5. Search tips (by year or by apartment)
+6. Sort tips (by date or by amount)
+7. Show total tips
+8. Quit
 
+## Version 1.5
+- Save tips to a JSON file so they're still there the next time the
+  program runs
 
-Menu options for version 1: for example Add a tip, Show all tips, Show the total, Quit.
-What’s not in version 1: saving to a file, search, year-to-year comparison, a database. Listing these keeps the scope small.
+## Not in Version 1
+- A real database (SQL)
+- Searching by exact date or date range
+- Year-to-year comparison
+- A visual interface
+- Access from other devices
 
-Options for now: Add a tip, Edit a tip, Remove a tip, Show all tips, Show total income, Quit 
-
+## Design
+Each operation (add, remove, edit, search, sort, total) lives in its own
+function. The menu only calls those functions, so switching to a real
+database later only means rewriting the insides of those functions.
