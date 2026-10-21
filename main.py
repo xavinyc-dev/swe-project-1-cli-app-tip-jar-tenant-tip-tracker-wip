@@ -44,27 +44,28 @@ def selects_option(user_input, tips_library):
 
 
 def press_enter():
-    input("Press Enter to Continue to the Main Menu...")
+    input("\nPress Enter to Continue to the Main Menu...\n")
 
 
 def add_tip(tips_library):
     """Adds the users input for each key value pair into a dictionary then into a list"""
-    tenant = input("\nTenant Name: ")
-    apt = input("\nApartment: ")
-    amnt = float(input("\nAmount: "))
-    tip_type = input("\nType: ")
-    desc = input("\nDescription: ")
-    date = input("\nDate: ")
+    date = input("\nDate: ").strip().title()
+    apt = input("\nApartment: ").strip().title()
+    tenant = input("\nTenant Name: ").strip().title()
+    amnt = float(input("\nAmount: ").strip())
+    tip_type = input("\nType: ").strip().title()
+    desc = input("\nDescription: ").strip().title()
+
     tips = {
-        "Tenant: ": tenant,
-        "Apartment: ": apt,
-        "Amount: ": amnt,
-        "Type: ": tip_type,
-        "Description: ": desc,
-        "Date: ": date,
+        "Tenant": tenant,
+        "Apartment": apt,
+        "Amount": amnt,
+        "Type": tip_type,
+        "Description": desc,
+        "Date": date,
     }
+
     tips_library.append(tips)
-    print("Adding is a work in progress...")
 
 
 def edit_tip():
@@ -77,8 +78,22 @@ def remove_tip():
 
 def show_all_tips(tips_library):
     """Displays the tips list of dictionaries which include the tips information"""
-    print(tips_library)
-    print("Showing all is a work in progress...")
+    if len(tips_library) == 0:  # If no tips are in the list print this message and exit
+        print("There are no tips yet.")
+    else:
+        for tips in (
+            tips_library
+        ):  # Builds the table using key value pairs from dictionary tips
+            tenant = f"Tenant: {tips['Tenant']}"
+            apartment = f"Apartment: {tips['Apartment']}"
+            amount = f"Amount: ${tips['Amount']:.2f}"
+            tip_type = f"Type: {tips['Type']}"
+            description = f"Description: {tips['Description']}"
+            date = f"Date: {tips['Date']}"
+            row = f"| {date} | {apartment} | {tenant} | {amount} | {tip_type} | {description} |"
+            print("_" * len(row))
+            print(row)
+            print("-" * len(row))
 
 
 def search_tips():
