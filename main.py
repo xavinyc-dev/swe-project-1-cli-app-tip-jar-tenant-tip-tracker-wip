@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 def title_box():
     """Prints the title with box"""
     print("                   +" + "-" * 40 + "+")
@@ -16,11 +19,11 @@ def main_menu_box():
 def print_menu():
     """Function for printing main menu"""
     print("1. Add a Tip")
-    print("2. Edit a tip")
-    print("3. Remove a tip")
-    print("4. Show all tips")
-    print("5. Search tips (by year or by apartment)")
-    print("6. Sort tips (by date or by amount)")
+    print("2. Edit a tip(Under Development)")
+    print("3. Remove a tip(Under Development)")
+    print("4. Show all tips(Under Development)")
+    print("5. Search tips (by year or by apartment)(Under Development)")
+    print("6. Sort tips (by date or by amount)(Under Development)")
     print("7. Show total tips")
     print("8. Quit")
 
@@ -40,7 +43,7 @@ def selects_option(user_input, tips_library):
     elif user_input == 6:
         sort_tips()
     elif user_input == 7:
-        show_tip_total()
+        show_tip_total(tips_library)
 
 
 def press_enter():
@@ -49,10 +52,27 @@ def press_enter():
 
 def add_tip(tips_library):
     """Adds the users input for each key value pair into a dictionary then into a list"""
-    date = input("\nDate: ").strip().title()
+    date_text = input("\nDate (MM-DD-YYYY): ").strip()
+    while True:
+        try:
+            date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
+            break
+        except ValueError:
+            print(
+                "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
+            )
+            date_text = input("\nDate (MM-DD-YYYY): ").strip()
+
     apt = input("\nApartment: ").strip().title()
     tenant = input("\nTenant Name: ").strip().title()
-    amnt = float(input("\nAmount: ").strip())
+    amnt = input("\nAmount: ").strip()
+    while True:
+        try:
+            amnt = float(amnt)
+            break
+        except ValueError:
+            print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
+            amnt = input("\nAmount: ").strip()
     tip_type = input("\nType: ").strip().title()
     desc = input("\nDescription: ").strip().title()
 
@@ -77,22 +97,25 @@ def remove_tip():
 
 
 def show_all_tips(tips_library):
-    """Displays the tips list of dictionaries which include the tips information"""
-    if len(tips_library) == 0:  # If no tips are in the list print this message and exit
+    """Displays the tips in a certain format"""
+    if len(tips_library) == 0:
         print("There are no tips yet.")
     else:
-        for tips in (
+        for tip in (
             tips_library
-        ):  # Builds the table using key value pairs from dictionary tips
-            tenant = f"Tenant: {tips['Tenant']}"
-            apartment = f"Apartment: {tips['Apartment']}"
-            amount = f"Amount: ${tips['Amount']:.2f}"
-            tip_type = f"Type: {tips['Type']}"
-            description = f"Description: {tips['Description']}"
-            date = f"Date: {tips['Date']}"
+        ):  # tip contains the tip information from a single dictionary each pass
+            # Prints a row using key value pairs from tip.
+            tenant = f"Tenant: {tip['Tenant']}"  # assigns a variable to f string with specified label and value of key value pair in tips dictionary
+            apartment = f"Apartment: {tip['Apartment']}"
+            amount = f"Amount: ${tip['Amount']:.2f}"  # .2f for 2 decimal points
+            tip_type = f"Type: {tip['Type']}"
+            description = f"Description: {tip['Description']}"
+            date = f"Date: {tip['Date']}"
+
             row = f"| {date} | {apartment} | {tenant} | {amount} | {tip_type} | {description} |"
-            print("_" * len(row))
-            print(row)
+
+            print("_" * len(row))  # forms a line
+            print(row)  # prints the variable holding the formatted f string
             print("-" * len(row))
 
 
@@ -104,8 +127,11 @@ def sort_tips():
     print("Sorting is a work in progress...")
 
 
-def show_tip_total():
-    print("Total is a work in progress...")
+def show_tip_total(tips_library):
+    total = 0
+    for tip_amount in tips_library:
+        total += tip_amount["Amount"]
+    print(f"Your total income of tips: ${total:.2f}".title())
 
 
 def main():
