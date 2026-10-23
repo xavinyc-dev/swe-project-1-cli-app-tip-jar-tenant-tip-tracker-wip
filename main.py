@@ -18,13 +18,13 @@ def main_menu_box():
 
 def print_menu():
     """Function for printing main menu"""
-    print("1. Add a Tip")
-    print("2. Edit a tip(Under Development)")
-    print("3. Remove a tip(Under Development)")
-    print("4. Show all tips(Under Development)")
-    print("5. Search tips (by year or by apartment)(Under Development)")
-    print("6. Sort tips (by date or by amount)(Under Development)")
-    print("7. Show total tips")
+    print("1. Add a Tip.")
+    print("2. Edit a tip.(Under Development)")
+    print("3. Remove a tip.(Under Development)")
+    print("4. Show all tips.")
+    print("5. Search tips. (by year or by apartment)(Under Development)")
+    print("6. Sort tips. (by date or by amount)(Under Development)")
+    print("7. Show tips total amount.")
     print("8. Quit")
 
 
@@ -43,7 +43,7 @@ def selects_option(user_input, tips_library):
     elif user_input == 6:
         sort_tips()
     elif user_input == 7:
-        show_tip_total(tips_library)
+        show_tip_total(total_math(tips_library))
 
 
 def press_enter():
@@ -69,7 +69,13 @@ def add_tip(tips_library):
     while True:
         try:
             amnt = float(amnt)
-            break
+            if amnt >= 0:
+                break
+            else:
+                print(
+                    "\nThat input is invalid.\n\nPlease input a positive dollar amount"
+                )
+                amnt = input("\nAmount: ").strip()
         except ValueError:
             print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
             amnt = input("\nAmount: ").strip()
@@ -127,10 +133,14 @@ def sort_tips():
     print("Sorting is a work in progress...")
 
 
-def show_tip_total(tips_library):
+def total_math(tips_library):
     total = 0
     for tip_amount in tips_library:
         total += tip_amount["Amount"]
+    return total
+
+
+def show_tip_total(total):
     print(f"Your total income of tips: ${total:.2f}".title())
 
 
