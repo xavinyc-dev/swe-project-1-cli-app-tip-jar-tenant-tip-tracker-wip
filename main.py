@@ -1,3 +1,7 @@
+# Separation of Concerns - each part of a program has one concern and knows as little as possible about the others
+# Modularity - breaking up a program into parts
+# Abstraction - the degree to which you condense something down to just a simple idea
+
 from datetime import datetime
 
 
@@ -6,6 +10,10 @@ def title_box():
     print("                   +" + "-" * 40 + "+")
     print("                   | " + "Welcome to the tip management program." + " |")
     print("                   +" + "-" * 40 + "+")
+
+
+def spacer():
+    print("-" * 50)
 
 
 def main_menu_box():
@@ -28,10 +36,10 @@ def print_menu():
     print("8. Quit")
 
 
-def selects_option(user_input, tips_library):
+def selects_option(user_input, tips_library, tip_id):
     """Selects the option in the menu"""
     if user_input == 1:
-        add_tip(tips_library)
+        add_tip(tips_library, tip_id)
     elif user_input == 2:
         edit_tip()
     elif user_input == 3:
@@ -41,7 +49,7 @@ def selects_option(user_input, tips_library):
     elif user_input == 5:
         search_tips()
     elif user_input == 6:
-        sort_tips()
+        sort_tips(tips_library)
     elif user_input == 7:
         show_tip_total(total_math(tips_library))
 
@@ -50,48 +58,66 @@ def press_enter():
     input("\nPress Enter to Continue to the Main Menu...\n")
 
 
-def add_tip(tips_library):
+def add_tip(tips_library, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
-    date_text = input("\nDate (MM-DD-YYYY): ").strip()
     while True:
-        try:
-            date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
-            break
-        except ValueError:
-            print(
-                "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
-            )
-            date_text = input("\nDate (MM-DD-YYYY): ").strip()
-
-    apt = input("\nApartment: ").strip().title()
-    tenant = input("\nTenant Name: ").strip().title()
-    amnt = input("\nAmount: ").strip()
-    while True:
-        try:
-            amnt = float(amnt)
-            if amnt >= 0:
+        spacer()
+        date_text = input("\nDate (MM-DD-YYYY): ").strip()
+        while True:
+            try:
+                date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
                 break
-            else:
+            except ValueError:
                 print(
-                    "\nThat input is invalid.\n\nPlease input a positive dollar amount"
+                    "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
                 )
+                date_text = input("\nDate (MM-DD-YYYY): ").strip()
+        spacer()
+        apt = input("\nApartment: ").strip().title()
+        spacer()
+        tenant = input("\nTenant Name: ").strip().title()
+        spacer()
+        amnt = input("\nAmount: ").strip()
+        while True:
+            try:
+                amnt = float(amnt)
+                if amnt >= 0:
+                    break
+                else:
+                    print(
+                        "\nThat input is invalid.\n\nPlease input a positive dollar amount"
+                    )
+                    amnt = input("\nAmount: ").strip()
+            except ValueError:
+                print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
                 amnt = input("\nAmount: ").strip()
-        except ValueError:
-            print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
-            amnt = input("\nAmount: ").strip()
-    tip_type = input("\nType: ").strip().title()
-    desc = input("\nDescription: ").strip().title()
+        spacer()
+        tip_type = input("\nType: ").strip().title()
+        spacer()
+        desc = input("\nDescription: ").strip().title()
+        spacer()
 
-    tips = {
-        "Tenant": tenant,
-        "Apartment": apt,
-        "Amount": amnt,
-        "Type": tip_type,
-        "Description": desc,
-        "Date": date,
-    }
+        tips = {
+            "ID": tip_id,
+            "Tenant": tenant,
+            "Apartment": apt,
+            "Amount": amnt,
+            "Type": tip_type,
+            "Description": desc,
+            "Date": date,
+        }
 
-    tips_library.append(tips)
+        tips_library.append(tips)
+        print("\nYou have added a tip to your tip jar!\n\nWhats Next?")
+        spacer()
+        response = input("\n1. Add another tip         2. Main Menu:\n").strip()
+        while response != "1" and response != "2":
+            print("Invalid response. Choose 1 or 2.")
+            response = input("\n1. Add another tip         2. Main Menu:\n").strip()
+        if response == "1":
+            continue
+        elif response == "2":
+            break
 
 
 def edit_tip():
@@ -125,7 +151,7 @@ def show_all_tips(tips_library):
             print("-" * len(row))
 
 
-def search_tips():
+def search_tips(tips_library):
     print("Searching is a work in progress...")
 
 
@@ -147,6 +173,7 @@ def show_tip_total(total):
 def main():
     """Main while loop"""
     tips_library = []
+    tip_id = 1
     title_box()
 
     while True:
@@ -163,7 +190,7 @@ def main():
         if user_input == 8:
             print("Goodbye!")
             break
-        selects_option(user_input, tips_library)
+        selects_option(user_input, tips_library, tip_id)
         press_enter()
 
 
