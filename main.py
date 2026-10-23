@@ -7,9 +7,9 @@ from datetime import datetime
 
 def title_box():
     """Prints the title with box"""
-    print("                   +" + "-" * 40 + "+")
-    print("                   | " + "Welcome to the tip management program." + " |")
-    print("                   +" + "-" * 40 + "+")
+    print(f"{' ' * 19}+" + "-" * 40 + "+")
+    print(f"{' ' * 19}| " + "Welcome to the tip management program." + " |")
+    print(f"{' ' * 19}+" + "-" * 40 + "+")
 
 
 def spacer():
@@ -39,7 +39,7 @@ def print_menu():
 def selects_option(user_input, tips_library, tip_id):
     """Selects the option in the menu"""
     if user_input == 1:
-        add_tip(tips_library, tip_id)
+        tip_id = add_tip(tips_library, tip_id)
     elif user_input == 2:
         edit_tip()
     elif user_input == 3:
@@ -52,6 +52,7 @@ def selects_option(user_input, tips_library, tip_id):
         sort_tips(tips_library)
     elif user_input == 7:
         show_tip_total(total_math(tips_library))
+    return tip_id
 
 
 def press_enter():
@@ -108,6 +109,7 @@ def add_tip(tips_library, tip_id):
         }
 
         tips_library.append(tips)
+        tip_id += 1
         print("\nYou have added a tip to your tip jar!\n\nWhats Next?")
         spacer()
         response = input("\n1. Add another tip         2. Main Menu:\n").strip()
@@ -117,7 +119,7 @@ def add_tip(tips_library, tip_id):
         if response == "1":
             continue
         elif response == "2":
-            break
+            return tip_id
 
 
 def edit_tip():
@@ -137,6 +139,7 @@ def show_all_tips(tips_library):
             tips_library
         ):  # tip contains the tip information from a single dictionary each pass
             # Prints a row using key value pairs from tip.
+            tip_id = f"ID: {tip['ID']}"
             tenant = f"Tenant: {tip['Tenant']}"  # assigns a variable to f string with specified label and value of key value pair in tips dictionary
             apartment = f"Apartment: {tip['Apartment']}"
             amount = f"Amount: ${tip['Amount']:.2f}"  # .2f for 2 decimal points
@@ -144,7 +147,7 @@ def show_all_tips(tips_library):
             description = f"Description: {tip['Description']}"
             date = f"Date: {tip['Date']}"
 
-            row = f"| {date} | {apartment} | {tenant} | {amount} | {tip_type} | {description} |"
+            row = f"| {tip_id} | {date} | {apartment} | {tenant} | {amount} | {tip_type} | {description} |"
 
             print("_" * len(row))  # forms a line
             print(row)  # prints the variable holding the formatted f string
@@ -190,7 +193,7 @@ def main():
         if user_input == 8:
             print("Goodbye!")
             break
-        selects_option(user_input, tips_library, tip_id)
+        tip_id = selects_option(user_input, tips_library, tip_id)
         press_enter()
 
 
