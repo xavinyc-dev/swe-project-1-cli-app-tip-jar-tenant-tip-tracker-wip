@@ -1,7 +1,3 @@
-# Separation of Concerns - each part of a program has one concern and knows as little as possible about the others
-# Modularity - breaking up a program into parts
-# Abstraction - the degree to which you condense something down to just a simple idea
-
 from datetime import datetime
 
 
@@ -27,7 +23,7 @@ def main_menu_box():
 def print_menu():
     """Function for printing main menu"""
     print("1. Add a Tip.")
-    print("2. Edit a tip.(Under Development)")
+    print("2. Edit a tip.")
     print("3. Remove a tip.(Under Development)")
     print("4. Show all tips.")
     print("5. Search tips. (by year or by apartment)(Under Development)")
@@ -49,7 +45,7 @@ def selects_option(user_input, tips_library, tip_id):
     elif user_input == 5:
         search_tips()
     elif user_input == 6:
-        sort_tips(tips_library)
+        sort_tips()
     elif user_input == 7:
         show_tip_total(total_math(tips_library))
     return tip_id
@@ -78,23 +74,24 @@ def add_tip(tips_library, tip_id):
         spacer()
         tenant = input("\nTenant Name: ").strip().title()
         spacer()
-        amnt = float(input("\nAmount: ").strip())
+        amnt = input("\nAmount: ").strip()
         while True:
             try:
+                amnt = float(amnt)
                 if amnt >= 0:
                     break
                 else:
                     print(
                         "\nThat input is invalid.\n\nPlease input a positive dollar amount"
                     )
-                    amnt = float(input("\nAmount: ").strip())
+                    amnt = input("\nAmount: ").strip()
             except ValueError:
                 print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
-                amnt = float(input("\nAmount: ").strip())
+                amnt = input("\nAmount: ").strip()
         spacer()
-        tip_type = input("\nType: ").strip().title()
+        tip_type = input("\nTip Type(Cash, Zelle, Gift Card…): ").strip().title()
         spacer()
-        desc = input("\nDescription: ").strip().title()
+        desc = input("\nDescription: ").strip()
         spacer()
 
         tips = {
@@ -128,14 +125,14 @@ def print_edit_options():
 def edit_tip(tips_library):
     if len(tips_library) == 0:
         print("There are no tips yet.")
+        press_enter()
     else:
         show_all_tips(tips_library)
-        print("\nInput the ID of the of the tip you'd like to edit\n")
+        print("\nInput the ID of the tip you'd like to edit\n")
         while True:
             wanted_id = input("ID: ")
             while not wanted_id.isdigit():
-                wanted_id = input("\nInput a valid ID number.\nID: ")
-                continue
+                wanted_id = input("\nInput a valid ID number thats on the list.\nID: ")
             wanted_id = int(wanted_id)
 
             found = False
@@ -147,11 +144,13 @@ def edit_tip(tips_library):
             print("Input a valid ID number thats on the list.")
 
         print_edit_options()
-        wanted_field = input("\nField to edit: ")
+        wanted_field = input("\nField to edit(1-6): ")
+        while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
+            wanted_field = input("\nInput a valid field number.\nField(1-6): ")
         if int(wanted_field) == 1:
             for tip in tips_library:
-                if tip["ID"] == int(wanted_id):
-                    tip["Date"] = input("Date (MM-DD-YYYY): ")
+                if tip["ID"] == wanted_id:
+                    tip["Date"] = input("Date (MM-DD-YYYY): ").strip()
                     while True:
                         try:
                             tip["Date"] = (
@@ -165,49 +164,54 @@ def edit_tip(tips_library):
                             tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
         elif int(wanted_field) == 2:
             for tip in tips_library:
-                if tip["ID"] == int(wanted_id):
-                    tip["Apartment"] = input("Apartment: ")
+                if tip["ID"] == wanted_id:
+                    tip["Apartment"] = input("Apartment: ").strip().title()
         elif int(wanted_field) == 3:
             for tip in tips_library:
-                if tip["ID"] == int(wanted_id):
-                    tip["Tenant"] = input("Tenant: ")
+                if tip["ID"] == wanted_id:
+                    tip["Tenant"] = input("Tenant: ").strip().title()
         elif int(wanted_field) == 4:
             for tip in tips_library:
-                if tip["ID"] == int(wanted_id):
-                    tip["Amount"] = float(input("Amount: "))
+                if tip["ID"] == wanted_id:
+                    tip["Amount"] = input("Amount: ").strip()
                     while True:
                         try:
-                            amnt = tip["Amount"]
-                            if amnt >= 0:
+                            tip["Amount"] = float(tip["Amount"])
+                            if tip["Amount"] >= 0:
                                 break
                             else:
                                 print(
                                     "\nThat input is invalid.\n\nPlease input a positive dollar amount"
                                 )
-                                amnt = float(input("\nAmount: ").strip())
+                                tip["Amount"] = input("\nAmount: ").strip()
                         except ValueError:
                             print(
                                 "\nThat input is invalid.\n\nPlease input a valid dollar amount"
                             )
-                            amnt = float(input("\nAmount: ").strip())
+                            tip["Amount"] = input("\nAmount: ").strip()
         elif int(wanted_field) == 5:
             for tip in tips_library:
-                if tip["ID"] == int(wanted_id):
-                    tip["Tip Type"] = input("Tip Type: ")
+                if tip["ID"] == wanted_id:
+                    tip["Tip Type"] = (
+                        input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
+                    )
         elif int(wanted_field) == 6:
             for tip in tips_library:
-                if tip["ID"] == int(wanted_id):
-                    tip["Description"] = input("Description: ")
+                if tip["ID"] == wanted_id:
+                    tip["Description"] = input("Description: ").strip()
+        press_enter()
 
 
 def remove_tip():
     print("Removing is a work in progress...")
+    press_enter()
 
 
 def show_all_tips(tips_library):
     """Displays the tips in a certain format"""
     if len(tips_library) == 0:
         print("There are no tips yet.")
+        press_enter()
     else:
         for tip in (
             tips_library
@@ -226,14 +230,17 @@ def show_all_tips(tips_library):
             print("_" * len(row))  # forms a line
             print(row)  # prints the variable holding the formatted f string
             print("-" * len(row))
+        press_enter()
 
 
-def search_tips(tips_library):
+def search_tips():
     print("Searching is a work in progress...")
+    press_enter()
 
 
 def sort_tips():
     print("Sorting is a work in progress...")
+    press_enter()
 
 
 def total_math(tips_library):
@@ -245,6 +252,7 @@ def total_math(tips_library):
 
 def show_tip_total(total):
     print(f"Your total income of tips: ${total:.2f}".title())
+    press_enter()
 
 
 def main():
@@ -268,7 +276,6 @@ def main():
             print("Goodbye!")
             break
         tip_id = selects_option(user_input, tips_library, tip_id)
-        press_enter()
 
 
 main()

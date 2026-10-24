@@ -12,20 +12,20 @@ that is easy to search, easy to read, and visually appealing.
 A terminal app for a friend of mine who works in an apartment building.
 You can add, edit, and remove tips, see your total, and search and sort
 your tips. Tips are stored in a list of dictionaries while the program
-runs.
+runs. Running it will just be python3 main.py until further notice.
 
 ## What each tip records
 - **Tenant name** (optional, can be left blank)
-- **Apartment** (for example `4B`)
+- **Apartment** (for example `4B` or the floor)
 - **Amount** (always a number in dollars; use `0` or an estimated value
   for physical items)
 - **Type**: cash, card, gift card, physical item, or other
 - **Description** (optional text, for example "bottle of wine" for a
   physical item, or details for "other")
-- **Date** the tip was received, in the format `YYYY-MM-DD`
-  (for example `2026-12-24`), so tips can be searched by date and yearly
+- **Date** the tip was received, in the format `MM-DD-YYYY`
+  (for example `12-24-2026`), so tips can be searched by date and yearly
   totals can be calculated
-
+As of right now empty fields work for most of these features. All work in progress.
 ## Menu options (Version 1)
 1. Add a tip
 2. Edit a tip
