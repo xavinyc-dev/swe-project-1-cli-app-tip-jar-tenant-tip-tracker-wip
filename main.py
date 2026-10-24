@@ -41,7 +41,7 @@ def selects_option(user_input, tips_library, tip_id):
     if user_input == 1:
         tip_id = add_tip(tips_library, tip_id)
     elif user_input == 2:
-        edit_tip()
+        edit_tip(tips_library)
     elif user_input == 3:
         remove_tip()
     elif user_input == 4:
@@ -56,7 +56,7 @@ def selects_option(user_input, tips_library, tip_id):
 
 
 def press_enter():
-    input("\nPress Enter to Continue to the Main Menu...\n")
+    input("\nPress Enter to Continue...\n")
 
 
 def add_tip(tips_library, tip_id):
@@ -78,20 +78,19 @@ def add_tip(tips_library, tip_id):
         spacer()
         tenant = input("\nTenant Name: ").strip().title()
         spacer()
-        amnt = input("\nAmount: ").strip()
+        amnt = float(input("\nAmount: ").strip())
         while True:
             try:
-                amnt = float(amnt)
                 if amnt >= 0:
                     break
                 else:
                     print(
                         "\nThat input is invalid.\n\nPlease input a positive dollar amount"
                     )
-                    amnt = input("\nAmount: ").strip()
+                    amnt = float(input("\nAmount: ").strip())
             except ValueError:
                 print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
-                amnt = input("\nAmount: ").strip()
+                amnt = float(input("\nAmount: ").strip())
         spacer()
         tip_type = input("\nType: ").strip().title()
         spacer()
@@ -103,7 +102,7 @@ def add_tip(tips_library, tip_id):
             "Tenant": tenant,
             "Apartment": apt,
             "Amount": amnt,
-            "Type": tip_type,
+            "Tip Type": tip_type,
             "Description": desc,
             "Date": date,
         }
@@ -122,8 +121,83 @@ def add_tip(tips_library, tip_id):
             return tip_id
 
 
-def edit_tip():
-    print("Editing is a work in progress...")
+def print_edit_options():
+    print("\n1. Date\n2. Apartment\n3. Tenant\n4. Amount\n5. Tip Type\n6. Description")
+
+
+def edit_tip(tips_library):
+    if len(tips_library) == 0:
+        print("There are no tips yet.")
+    else:
+        show_all_tips(tips_library)
+        print("\nInput the ID of the of the tip you'd like to edit\n")
+        while True:
+            wanted_id = input("ID: ")
+            while not wanted_id.isdigit():
+                wanted_id = input("\nInput a valid ID number.\nID: ")
+                continue
+            wanted_id = int(wanted_id)
+
+            found = False
+            for tip in tips_library:
+                if tip["ID"] == wanted_id:
+                    found = True
+            if found:
+                break
+            print("Input a valid ID number thats on the list.")
+
+        print_edit_options()
+        wanted_field = input("\nField to edit: ")
+        if int(wanted_field) == 1:
+            for tip in tips_library:
+                if tip["ID"] == int(wanted_id):
+                    tip["Date"] = input("Date (MM-DD-YYYY): ")
+                    while True:
+                        try:
+                            tip["Date"] = (
+                                datetime.strptime(tip["Date"], "%m-%d-%Y")
+                            ).strftime("%m-%d-%Y")
+                            break
+                        except ValueError:
+                            print(
+                                "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
+                            )
+                            tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
+        elif int(wanted_field) == 2:
+            for tip in tips_library:
+                if tip["ID"] == int(wanted_id):
+                    tip["Apartment"] = input("Apartment: ")
+        elif int(wanted_field) == 3:
+            for tip in tips_library:
+                if tip["ID"] == int(wanted_id):
+                    tip["Tenant"] = input("Tenant: ")
+        elif int(wanted_field) == 4:
+            for tip in tips_library:
+                if tip["ID"] == int(wanted_id):
+                    tip["Amount"] = float(input("Amount: "))
+                    while True:
+                        try:
+                            amnt = tip["Amount"]
+                            if amnt >= 0:
+                                break
+                            else:
+                                print(
+                                    "\nThat input is invalid.\n\nPlease input a positive dollar amount"
+                                )
+                                amnt = float(input("\nAmount: ").strip())
+                        except ValueError:
+                            print(
+                                "\nThat input is invalid.\n\nPlease input a valid dollar amount"
+                            )
+                            amnt = float(input("\nAmount: ").strip())
+        elif int(wanted_field) == 5:
+            for tip in tips_library:
+                if tip["ID"] == int(wanted_id):
+                    tip["Tip Type"] = input("Tip Type: ")
+        elif int(wanted_field) == 6:
+            for tip in tips_library:
+                if tip["ID"] == int(wanted_id):
+                    tip["Description"] = input("Description: ")
 
 
 def remove_tip():
@@ -143,7 +217,7 @@ def show_all_tips(tips_library):
             tenant = f"Tenant: {tip['Tenant']}"  # assigns a variable to f string with specified label and value of key value pair in tips dictionary
             apartment = f"Apartment: {tip['Apartment']}"
             amount = f"Amount: ${tip['Amount']:.2f}"  # .2f for 2 decimal points
-            tip_type = f"Type: {tip['Type']}"
+            tip_type = f"Tip Type: {tip['Tip Type']}"
             description = f"Description: {tip['Description']}"
             date = f"Date: {tip['Date']}"
 
