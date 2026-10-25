@@ -4,9 +4,10 @@ import os
 
 def title_box():
     """Prints the title with box"""
-    print(f"{' ' * 19}+" + "-" * 40 + "+")
-    print(f"{' ' * 19}| " + "Welcome to the tip management program." + " |")
-    print(f"{' ' * 19}+" + "-" * 40 + "+")
+    tip_jar = "| Tip Jar |"
+    print(" " * 25, "+" + ("-" * (len(tip_jar) - 2)) + "+")
+    print(" " * 25, tip_jar)
+    print(" " * 25, "+" + ("-" * (len(tip_jar) - 2)) + "+")
 
 
 def spacer():
@@ -77,7 +78,7 @@ def add_tip(tips_library, tip_id):
                 date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
                 clear_screen()
                 spacer()
-                print(f"Date: {date}")
+                print(f"Date (MM-DD-YYYY): {date}")
                 break
             except ValueError:
                 clear_screen()
@@ -101,7 +102,7 @@ def add_tip(tips_library, tip_id):
                 else:
                     clear_screen()
                     spacer()
-                    print(f"Date: {date}")
+                    print(f"Date (MM-DD-YYYY): {date}")
                     spacer()
                     print(f"Apartment: {apt}")
                     spacer()
@@ -114,7 +115,7 @@ def add_tip(tips_library, tip_id):
             except ValueError:
                 clear_screen()
                 spacer()
-                print(f"Date: {date}")
+                print(f"Date (MM-DD-YYYY): {date}")
                 spacer()
                 print(f"Apartment: {apt}")
                 spacer()
@@ -163,12 +164,12 @@ def print_edit_options():
     print("\n1. Date\n2. Apartment\n3. Tenant\n4. Amount\n5. Tip Type\n6. Description")
 
 
-def edit_tip(tips_library):
-    if len(tips_library) == 0:
+def edit_tip(tips_jar):
+    if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
         press_enter()
     else:
-        show_all_tips(tips_library)
+        show_all_tips(tips_jar)
         print("\nInput the ID of the tip you'd like to edit\n")
         while True:
             wanted_id = input("ID: ")
@@ -179,7 +180,7 @@ def edit_tip(tips_library):
             wanted_id = int(wanted_id)
 
             found = False
-            for tip in tips_library:
+            for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     found = True
             if found:
@@ -191,7 +192,7 @@ def edit_tip(tips_library):
         while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
             wanted_field = input("\nInput a valid field number.\n\nField(1-6): ")
         if int(wanted_field) == 1:
-            for tip in tips_library:
+            for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
                     while True:
@@ -206,15 +207,15 @@ def edit_tip(tips_library):
                             )
                             tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
         elif int(wanted_field) == 2:
-            for tip in tips_library:
+            for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     tip["Apartment"] = input("\nApartment: ").strip().title()
         elif int(wanted_field) == 3:
-            for tip in tips_library:
+            for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     tip["Tenant"] = input("\nTenant: ").strip().title()
         elif int(wanted_field) == 4:
-            for tip in tips_library:
+            for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     tip["Amount"] = input("\nAmount: ").strip()
                     while True:
@@ -233,13 +234,13 @@ def edit_tip(tips_library):
                             )
                             tip["Amount"] = input("\nAmount: ").strip()
         elif int(wanted_field) == 5:
-            for tip in tips_library:
+            for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     tip["Tip Type"] = (
                         input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
                     )
         elif int(wanted_field) == 6:
-            for tip in tips_library:
+            for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     tip["Description"] = input("\nDescription: ").strip()
         print("\nAny edits have been saved!")
@@ -302,9 +303,9 @@ def main():
     tips_library = []
     tip_id = 1
     clear_screen()
-    title_box()
 
     while True:
+        title_box()
         main_menu_box()
         print()
         print_menu()
