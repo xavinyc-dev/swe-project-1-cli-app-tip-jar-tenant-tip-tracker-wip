@@ -1,4 +1,4 @@
-# AparTip - Tenant Tip Tracker (Work in Progress)
+# TipJar - Tenant Tip Tracker (Work in Progress)
 
 ## Vision
 This app is for any worker in an apartment building or hotel who has to
