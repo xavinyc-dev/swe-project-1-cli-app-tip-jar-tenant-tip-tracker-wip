@@ -71,39 +71,61 @@ def add_tip(tips_library, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
         spacer()
-        date_text = input("\nDate (MM-DD-YYYY): ").strip()
+        date_text = input("Date (MM-DD-YYYY): ").strip()
         while True:
             try:
                 date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
+                clear_screen()
+                spacer()
+                print(f"Date: {date}")
                 break
             except ValueError:
+                clear_screen()
+                spacer()
                 print(
-                    "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
+                    "That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
                 )
                 date_text = input("\nDate (MM-DD-YYYY): ").strip()
+
         spacer()
-        apt = input("\nApartment: ").strip().title()
+        apt = input("Apartment: ").strip().title()
         spacer()
-        tenant = input("\nTenant Name: ").strip().title()
+        tenant = input("Tenant Name: ").strip().title()
         spacer()
-        amnt = input("\nAmount: ").strip()
+        amnt = input("Amount: ").strip()
         while True:
             try:
                 amnt = float(amnt)
                 if amnt >= 0:
                     break
                 else:
+                    clear_screen()
+                    spacer()
+                    print(f"Date: {date}")
+                    spacer()
+                    print(f"Apartment: {apt}")
+                    spacer()
+                    print(f"Tenant Name: {tenant}")
+                    spacer()
                     print(
-                        "\nThat input is invalid.\n\nPlease input a positive dollar amount"
+                        "That input is invalid.\n\nPlease input a positive dollar amount"
                     )
                     amnt = input("\nAmount: ").strip()
             except ValueError:
-                print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
+                clear_screen()
+                spacer()
+                print(f"Date: {date}")
+                spacer()
+                print(f"Apartment: {apt}")
+                spacer()
+                print(f"Tenant Name: {tenant}")
+                spacer()
+                print("That input is invalid.\n\nPlease input a valid dollar amount")
                 amnt = input("\nAmount: ").strip()
         spacer()
-        tip_type = input("\nTip Type(Cash, Zelle, Gift Card…): ").strip().title()
+        tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
         spacer()
-        desc = input("\nDescription: ").strip()
+        desc = input("Description: ").strip()
         spacer()
 
         tips = {
@@ -118,11 +140,10 @@ def add_tip(tips_library, tip_id):
 
         tips_library.append(tips)
         tip_id += 1
-        clear_screen()
-        print("\nYou have added a tip to your tip jar!\n")
+        print("You have added a tip to your tip jar!")
         spacer()
         response = input(
-            "\nWhats Next?\n\n1. Add another tip         2. Main Menu\n\n:"
+            "Whats Next?\n\n1. Add another tip         2. Main Menu\n\n:"
         ).strip()
         while response != "1" and response != "2":
             clear_screen()
@@ -289,9 +310,13 @@ def main():
         print_menu()
         user_input = input("\nChoose your option(1 - 8): ")
         print()
-        if not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
-            print("\nPlease enter a number between 1 and 8.\n")
-            press_enter()
+        while not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
+            clear_screen()
+            main_menu_box()
+            print()
+            print_menu()
+            print("\nPlease enter a number between 1 and 8.")
+            user_input = input("\nChoose your option(1 - 8): ")
             continue
         user_input = int(user_input)
         if user_input == 8:
