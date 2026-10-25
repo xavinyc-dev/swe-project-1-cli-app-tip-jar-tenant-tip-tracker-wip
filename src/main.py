@@ -34,24 +34,24 @@ def print_menu():
     print("8. Quit")
 
 
-def selects_option(user_input, tips_library, tip_id):
+def selects_option(user_input, tips_jar, tip_id):
     """Selects the option in the menu"""
     clear_screen()
     if user_input == 1:
-        tip_id = add_tip(tips_library, tip_id)
+        tip_id = add_tip(tips_jar, tip_id)
     elif user_input == 2:
-        edit_tip(tips_library)
+        edit_tip(tips_jar)
     elif user_input == 3:
         remove_tip()
     elif user_input == 4:
-        show_all_tips(tips_library)
+        show_all_tips(tips_jar)
         press_enter()
     elif user_input == 5:
         search_tips()
     elif user_input == 6:
         sort_tips()
     elif user_input == 7:
-        show_tip_total(total_math(tips_library))
+        show_tip_total(total_math(tips_jar))
     return tip_id
 
 
@@ -68,7 +68,7 @@ def clear_screen():
         os.system("clear")
 
 
-def add_tip(tips_library, tip_id):
+def add_tip(tips_jar, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
         spacer()
@@ -139,7 +139,7 @@ def add_tip(tips_library, tip_id):
             "Date": date,
         }
 
-        tips_library.append(tips)
+        tips_jar.append(tips)
         tip_id += 1
         print("You have added a tip to your tip jar!")
         spacer()
@@ -252,13 +252,13 @@ def remove_tip():
     press_enter()
 
 
-def show_all_tips(tips_library):
+def show_all_tips(tips_jar):
     """Displays the tips in a certain format"""
-    if len(tips_library) == 0:
+    if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
     else:
         for tip in (
-            tips_library
+            tips_jar
         ):  # tip contains the tip information from a single dictionary each pass
             # Prints a row using key value pairs from tip.
             tip_id = f"ID: {tip['ID']}"
@@ -286,10 +286,12 @@ def sort_tips():
     press_enter()
 
 
-def total_math(tips_library):
-    total = 0
-    for tip_amount in tips_library:
-        total += tip_amount["Amount"]
+def total_math(tips_jar):
+    """Adds each value in Amount of each tip in a list and sums it up"""
+    tips_total = []
+    for tip in tips_jar:
+        tips_total.append(tip["Amount"])
+    total = sum(tips_total)
     return total
 
 
@@ -300,7 +302,8 @@ def show_tip_total(total):
 
 def main():
     """Main while loop"""
-    tips_library = []
+
+    tips_jar = []
     tip_id = 1
     clear_screen()
 
@@ -323,7 +326,7 @@ def main():
         if user_input == 8:
             print("\nGoodbye!")
             break
-        tip_id = selects_option(user_input, tips_library, tip_id)
+        tip_id = selects_option(user_input, tips_jar, tip_id)
 
 
 if __name__ == "__main__":
