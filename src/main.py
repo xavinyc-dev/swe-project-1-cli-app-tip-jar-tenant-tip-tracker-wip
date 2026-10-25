@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 
 
 def title_box():
@@ -34,6 +35,7 @@ def print_menu():
 
 def selects_option(user_input, tips_library, tip_id):
     """Selects the option in the menu"""
+    clear_screen()
     if user_input == 1:
         tip_id = add_tip(tips_library, tip_id)
     elif user_input == 2:
@@ -42,6 +44,7 @@ def selects_option(user_input, tips_library, tip_id):
         remove_tip()
     elif user_input == 4:
         show_all_tips(tips_library)
+        press_enter()
     elif user_input == 5:
         search_tips()
     elif user_input == 6:
@@ -53,45 +56,76 @@ def selects_option(user_input, tips_library, tip_id):
 
 def press_enter():
     input("\nPress Enter to Continue...\n")
+    clear_screen()
+
+
+def clear_screen():
+    """Clears the terminal when changing screens for readability depending on os"""
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
 
 
 def add_tip(tips_library, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
         spacer()
-        date_text = input("\nDate (MM-DD-YYYY): ").strip()
+        date_text = input("Date (MM-DD-YYYY): ").strip()
         while True:
             try:
                 date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
+                clear_screen()
+                spacer()
+                print(f"Date: {date}")
                 break
             except ValueError:
+                clear_screen()
+                spacer()
                 print(
-                    "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
+                    "That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
                 )
                 date_text = input("\nDate (MM-DD-YYYY): ").strip()
+
         spacer()
-        apt = input("\nApartment: ").strip().title()
+        apt = input("Apartment: ").strip().title()
         spacer()
-        tenant = input("\nTenant Name: ").strip().title()
+        tenant = input("Tenant Name: ").strip().title()
         spacer()
-        amnt = input("\nAmount: ").strip()
+        amnt = input("Amount: ").strip()
         while True:
             try:
                 amnt = float(amnt)
                 if amnt >= 0:
                     break
                 else:
+                    clear_screen()
+                    spacer()
+                    print(f"Date: {date}")
+                    spacer()
+                    print(f"Apartment: {apt}")
+                    spacer()
+                    print(f"Tenant Name: {tenant}")
+                    spacer()
                     print(
-                        "\nThat input is invalid.\n\nPlease input a positive dollar amount"
+                        "That input is invalid.\n\nPlease input a positive dollar amount"
                     )
                     amnt = input("\nAmount: ").strip()
             except ValueError:
-                print("\nThat input is invalid.\n\nPlease input a valid dollar amount")
+                clear_screen()
+                spacer()
+                print(f"Date: {date}")
+                spacer()
+                print(f"Apartment: {apt}")
+                spacer()
+                print(f"Tenant Name: {tenant}")
+                spacer()
+                print("That input is invalid.\n\nPlease input a valid dollar amount")
                 amnt = input("\nAmount: ").strip()
         spacer()
-        tip_type = input("\nTip Type(Cash, Zelle, Gift Card…): ").strip().title()
+        tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
         spacer()
-        desc = input("\nDescription: ").strip()
+        desc = input("Description: ").strip()
         spacer()
 
         tips = {
@@ -106,15 +140,22 @@ def add_tip(tips_library, tip_id):
 
         tips_library.append(tips)
         tip_id += 1
-        print("\nYou have added a tip to your tip jar!\n\nWhats Next?")
+        print("You have added a tip to your tip jar!")
         spacer()
-        response = input("\n1. Add another tip         2. Main Menu:\n").strip()
+        response = input(
+            "Whats Next?\n\n1. Add another tip         2. Main Menu\n\n:"
+        ).strip()
         while response != "1" and response != "2":
-            print("Invalid response. Choose 1 or 2.")
-            response = input("\n1. Add another tip         2. Main Menu:\n").strip()
+            clear_screen()
+            print("\nInvalid response. Choose 1 or 2.")
+            response = input(
+                "\nWhats Next?\n\n1. Add another tip         2. Main Menu\n\n:"
+            ).strip()
         if response == "1":
+            clear_screen()
             continue
         elif response == "2":
+            clear_screen()
             return tip_id
 
 
@@ -124,7 +165,7 @@ def print_edit_options():
 
 def edit_tip(tips_library):
     if len(tips_library) == 0:
-        print("There are no tips yet.")
+        print("\nThere are no tips yet.")
         press_enter()
     else:
         show_all_tips(tips_library)
@@ -132,7 +173,9 @@ def edit_tip(tips_library):
         while True:
             wanted_id = input("ID: ")
             while not wanted_id.isdigit():
-                wanted_id = input("\nInput a valid ID number thats on the list.\nID: ")
+                wanted_id = input(
+                    "\nInput a valid ID number thats on the list.\n\nID: "
+                )
             wanted_id = int(wanted_id)
 
             found = False
@@ -141,16 +184,16 @@ def edit_tip(tips_library):
                     found = True
             if found:
                 break
-            print("Input a valid ID number thats on the list.")
+            print("\nInput a valid ID number thats on the list.\n")
 
         print_edit_options()
         wanted_field = input("\nField to edit(1-6): ")
         while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
-            wanted_field = input("\nInput a valid field number.\nField(1-6): ")
+            wanted_field = input("\nInput a valid field number.\n\nField(1-6): ")
         if int(wanted_field) == 1:
             for tip in tips_library:
                 if tip["ID"] == wanted_id:
-                    tip["Date"] = input("Date (MM-DD-YYYY): ").strip()
+                    tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
                     while True:
                         try:
                             tip["Date"] = (
@@ -165,15 +208,15 @@ def edit_tip(tips_library):
         elif int(wanted_field) == 2:
             for tip in tips_library:
                 if tip["ID"] == wanted_id:
-                    tip["Apartment"] = input("Apartment: ").strip().title()
+                    tip["Apartment"] = input("\nApartment: ").strip().title()
         elif int(wanted_field) == 3:
             for tip in tips_library:
                 if tip["ID"] == wanted_id:
-                    tip["Tenant"] = input("Tenant: ").strip().title()
+                    tip["Tenant"] = input("\nTenant: ").strip().title()
         elif int(wanted_field) == 4:
             for tip in tips_library:
                 if tip["ID"] == wanted_id:
-                    tip["Amount"] = input("Amount: ").strip()
+                    tip["Amount"] = input("\nAmount: ").strip()
                     while True:
                         try:
                             tip["Amount"] = float(tip["Amount"])
@@ -198,7 +241,8 @@ def edit_tip(tips_library):
         elif int(wanted_field) == 6:
             for tip in tips_library:
                 if tip["ID"] == wanted_id:
-                    tip["Description"] = input("Description: ").strip()
+                    tip["Description"] = input("\nDescription: ").strip()
+        print("\nAny edits have been saved!")
         press_enter()
 
 
@@ -210,8 +254,7 @@ def remove_tip():
 def show_all_tips(tips_library):
     """Displays the tips in a certain format"""
     if len(tips_library) == 0:
-        print("There are no tips yet.")
-        press_enter()
+        print("\nThere are no tips yet.")
     else:
         for tip in (
             tips_library
@@ -230,7 +273,6 @@ def show_all_tips(tips_library):
             print("_" * len(row))  # forms a line
             print(row)  # prints the variable holding the formatted f string
             print("-" * len(row))
-        press_enter()
 
 
 def search_tips():
@@ -251,7 +293,7 @@ def total_math(tips_library):
 
 
 def show_tip_total(total):
-    print(f"Your total income of tips: ${total:.2f}".title())
+    print(f"\nYour total income of tips: ${total:.2f}".title())
     press_enter()
 
 
@@ -259,6 +301,7 @@ def main():
     """Main while loop"""
     tips_library = []
     tip_id = 1
+    clear_screen()
     title_box()
 
     while True:
@@ -267,15 +310,20 @@ def main():
         print_menu()
         user_input = input("\nChoose your option(1 - 8): ")
         print()
-        if not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
-            print("Please enter a number between 1 and 8.\n")
-            press_enter()
+        while not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
+            clear_screen()
+            main_menu_box()
+            print()
+            print_menu()
+            print("\nPlease enter a number between 1 and 8.")
+            user_input = input("\nChoose your option(1 - 8): ")
             continue
         user_input = int(user_input)
         if user_input == 8:
-            print("Goodbye!")
+            print("\nGoodbye!")
             break
         tip_id = selects_option(user_input, tips_library, tip_id)
 
 
-main()
+if __name__ == "__main__":
+    main()
