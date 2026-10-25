@@ -1,4 +1,4 @@
-# Tip Tracker
+# Tenant Tip Tracker
 
 ## Vision
 This app is for any worker in an apartment building or hotel who has to
