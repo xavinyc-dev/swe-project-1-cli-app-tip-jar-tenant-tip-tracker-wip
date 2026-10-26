@@ -26,7 +26,7 @@ def print_menu():
     """Function for printing main menu"""
     print("1. Add a Tip.")
     print("2. Edit a tip.")
-    print("3. Remove a tip.(Under Development)")
+    print("3. Remove a tip.")
     print("4. Show all tips.")
     print("5. Search tips. (by year or by apartment)(Under Development)")
     print("6. Sort tips. (by date or by amount)(Under Development)")
@@ -42,7 +42,7 @@ def selects_option(user_input, tips_jar, tip_id):
     elif user_input == 2:
         edit_tip(tips_jar)
     elif user_input == 3:
-        remove_tip()
+        remove_tip(tips_jar)
     elif user_input == 4:
         show_all_tips(tips_jar)
         press_enter()
@@ -109,7 +109,7 @@ def add_tip(tips_jar, tip_id):
                     print(f"Tenant Name: {tenant}")
                     spacer()
                     print(
-                        "That input is invalid.\n\nPlease input a positive dollar amount"
+                        "That input is invalid.\n\nPlease input a valid dollar amount"
                     )
                     amnt = input("\nAmount: ").strip()
             except ValueError:
@@ -194,18 +194,19 @@ def edit_tip(tips_jar):
         if int(wanted_field) == 1:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
-                    tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
+                    date_text = input("\nDate (MM-DD-YYYY): ").strip()
                     while True:
                         try:
-                            tip["Date"] = (
-                                datetime.strptime(tip["Date"], "%m-%d-%Y")
-                            ).strftime("%m-%d-%Y")
+                            date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime(
+                                "%m-%d-%Y"
+                            )
                             break
                         except ValueError:
                             print(
                                 "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
                             )
-                            tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
+                            date_text = input("\nDate (MM-DD-YYYY): ").strip()
+                    tip["Date"] = date
         elif int(wanted_field) == 2:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
@@ -247,9 +248,28 @@ def edit_tip(tips_jar):
         press_enter()
 
 
-def remove_tip():
-    print("Removing is a work in progress...")
-    press_enter()
+def remove_tip(tips_jar):
+    if len(tips_jar) == 0:
+        print("\nThere are no tips yet.")
+        press_enter()
+    else:
+        while True:
+            show_all_tips(tips_jar)
+            remove_id = input("\nWhich tip would you like to remove.\n\nInput ID: ")
+            for i, tip in enumerate(tips_jar):
+                if tip["ID"] == int(remove_id):
+                    tips_jar.pop(i)
+                    break
+                else:
+                    print(
+                        "\nThat tip ID does not exist.\n\nPlease input a valid ID from the list."
+                    )
+                    continue
+            clear_screen()
+            print("\nThe selection has been removed.\n")
+            show_all_tips(tips_jar)
+            press_enter()
+            break
 
 
 def show_all_tips(tips_jar):
