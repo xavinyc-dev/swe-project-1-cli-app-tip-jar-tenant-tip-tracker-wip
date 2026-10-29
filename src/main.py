@@ -84,6 +84,7 @@ def reinput_amnt(date, apt, tenant):
 
 
 def validate_amnt(amnt, date, apt, tenant):
+    """Validates the amount before continuing"""
     while True:
         try:
             amnt = float(amnt)
@@ -96,26 +97,31 @@ def validate_amnt(amnt, date, apt, tenant):
     return amnt
 
 
+def validate_date(date_text):
+    """Validates date before continuing"""
+    while True:
+        try:
+            date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
+            break
+        except ValueError:
+            clear_screen()
+            spacer()
+            print(
+                "That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
+            )
+            date_text = input("\nDate (MM-DD-YYYY): ").strip()
+    return date
+
+
 def add_tip(tips_jar, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
         spacer()
         date_text = input("Date (MM-DD-YYYY): ").strip()
-        while True:
-            try:
-                date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
-                clear_screen()
-                spacer()
-                print(f"Date (MM-DD-YYYY): {date}")
-                break
-            except ValueError:
-                clear_screen()
-                spacer()
-                print(
-                    "That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
-                )
-                date_text = input("\nDate (MM-DD-YYYY): ").strip()
-
+        date = validate_date(date_text)
+        clear_screen()
+        spacer()
+        print(f"Date (MM-DD-YYYY): {date}")
         spacer()
         apt = input("Apartment: ").strip().title()
         spacer()
@@ -165,6 +171,7 @@ def print_edit_options():
 
 
 def validate_id(tips_jar):
+    """Validates ID before continuing"""
     while True:
         wanted_id = input("ID: ").strip()
         while not wanted_id.isdigit():
@@ -205,17 +212,7 @@ def edit_tip(tips_jar):
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     date_text = input("\nDate (MM-DD-YYYY): ").strip()
-                    while True:
-                        try:
-                            date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime(
-                                "%m-%d-%Y"
-                            )
-                            break
-                        except ValueError:
-                            print(
-                                "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
-                            )
-                            date_text = input("\nDate (MM-DD-YYYY): ").strip()
+                    date = validate_date(date_text)
                     tip["Date"] = date
         elif int(wanted_field) == 2:
             for tip in tips_jar:
