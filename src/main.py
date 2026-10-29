@@ -68,6 +68,35 @@ def clear_screen():
         os.system("clear")
 
 
+def reinput_amnt(date, apt, tenant):
+    """Shows the last inputs while asking to re input amnt"""
+    clear_screen()
+    spacer()
+    print(f"Date (MM-DD-YYYY): {date}")
+    spacer()
+    print(f"Apartment: {apt}")
+    spacer()
+    print(f"Tenant Name: {tenant}")
+    spacer()
+    print("That input is invalid.\n\nPlease input a valid dollar amount")
+    amnt = input("\nAmount: ").strip()
+    return amnt
+
+
+def validate_amnt(amnt, date, apt, tenant):
+    while True:
+        try:
+            amnt = float(amnt)
+            if amnt >= 0:
+                break
+            else:
+                amnt = reinput_amnt(date, apt, tenant)
+                continue
+        except ValueError:
+            amnt = reinput_amnt(date, apt, tenant)
+    return amnt
+
+
 def add_tip(tips_jar, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
@@ -94,35 +123,7 @@ def add_tip(tips_jar, tip_id):
         tenant = input("Tenant Name: ").strip().title()
         spacer()
         amnt = input("Amount: ").strip()
-        while True:
-            try:
-                amnt = float(amnt)
-                if amnt >= 0:
-                    break
-                else:
-                    clear_screen()
-                    spacer()
-                    print(f"Date (MM-DD-YYYY): {date}")
-                    spacer()
-                    print(f"Apartment: {apt}")
-                    spacer()
-                    print(f"Tenant Name: {tenant}")
-                    spacer()
-                    print(
-                        "That input is invalid.\n\nPlease input a valid dollar amount"
-                    )
-                    amnt = input("\nAmount: ").strip()
-            except ValueError:
-                clear_screen()
-                spacer()
-                print(f"Date (MM-DD-YYYY): {date}")
-                spacer()
-                print(f"Apartment: {apt}")
-                spacer()
-                print(f"Tenant Name: {tenant}")
-                spacer()
-                print("That input is invalid.\n\nPlease input a valid dollar amount")
-                amnt = input("\nAmount: ").strip()
+        amnt = validate_amnt(amnt, date, apt, tenant)
         spacer()
         tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
         spacer()
@@ -172,11 +173,11 @@ def edit_tip(tips_jar):
         show_all_tips(tips_jar)
         print("\nInput the ID of the tip you'd like to edit\n")
         while True:
-            wanted_id = input("ID: ")
+            wanted_id = input("ID: ").strip()
             while not wanted_id.isdigit():
                 wanted_id = input(
                     "\nInput a valid ID number thats on the list.\n\nID: "
-                )
+                ).strip()
             wanted_id = int(wanted_id)
 
             found = False
@@ -188,9 +189,11 @@ def edit_tip(tips_jar):
             print("\nInput a valid ID number thats on the list.\n")
 
         print_edit_options()
-        wanted_field = input("\nField to edit(1-6): ")
+        wanted_field = input("\nField to edit(1-6): ").strip()
         while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
-            wanted_field = input("\nInput a valid field number.\n\nField(1-6): ")
+            wanted_field = input(
+                "\nInput a valid field number.\n\nField(1-6): "
+            ).strip()
         if int(wanted_field) == 1:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
@@ -255,7 +258,9 @@ def remove_tip(tips_jar):
     else:
         while True:
             show_all_tips(tips_jar)
-            remove_id = input("\nWhich tip would you like to remove.\n\nInput ID: ")
+            remove_id = input(
+                "\nWhich tip would you like to remove.\n\nInput ID: "
+            ).strip()
             for i, tip in enumerate(tips_jar):
                 if tip["ID"] == int(remove_id):
                     tips_jar.pop(i)
@@ -308,9 +313,7 @@ def sort_tips():
 
 def total_math(tips_jar):
     """Adds each value in Amount of each tip in a list and sums it up"""
-    tips_total = []
-    for tip in tips_jar:
-        tips_total.append(tip["Amount"])
+    tips_total = [tip["Amount"] for tip in tips_jar]
     total = sum(tips_total)
     return total
 
@@ -332,7 +335,7 @@ def main():
         main_menu_box()
         print()
         print_menu()
-        user_input = input("\nChoose your option(1 - 8): ")
+        user_input = input("\nChoose your option(1 - 8): ").strip()
         print()
         while not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
             clear_screen()
@@ -340,7 +343,7 @@ def main():
             print()
             print_menu()
             print("\nPlease enter a number between 1 and 8.")
-            user_input = input("\nChoose your option(1 - 8): ")
+            user_input = input("\nChoose your option(1 - 8): ").strip()
             continue
         user_input = int(user_input)
         if user_input == 8:
