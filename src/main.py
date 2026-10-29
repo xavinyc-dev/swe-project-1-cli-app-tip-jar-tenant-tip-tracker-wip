@@ -26,7 +26,7 @@ def print_menu():
     """Function for printing main menu"""
     print("1. Add a Tip.")
     print("2. Edit a tip.")
-    print("3. Remove a tip.(Under Development)")
+    print("3. Remove a tip.")
     print("4. Show all tips.")
     print("5. Search tips. (by year or by apartment)(Under Development)")
     print("6. Sort tips. (by date or by amount)(Under Development)")
@@ -42,7 +42,7 @@ def selects_option(user_input, tips_jar, tip_id):
     elif user_input == 2:
         edit_tip(tips_jar)
     elif user_input == 3:
-        remove_tip()
+        remove_tip(tips_jar)
     elif user_input == 4:
         show_all_tips(tips_jar)
         press_enter()
@@ -68,61 +68,67 @@ def clear_screen():
         os.system("clear")
 
 
+def reinput_amnt(date, apt, tenant):
+    """Shows the last inputs while asking to re input amnt"""
+    clear_screen()
+    spacer()
+    print(f"Date (MM-DD-YYYY): {date}")
+    spacer()
+    print(f"Apartment: {apt}")
+    spacer()
+    print(f"Tenant Name: {tenant}")
+    spacer()
+    print("That input is invalid.\n\nPlease input a valid dollar amount")
+    amnt = input("\nAmount: ").strip()
+    return amnt
+
+
+def validate_amnt(amnt, date, apt, tenant):
+    """Validates the amount before continuing"""
+    while True:
+        try:
+            amnt = float(amnt)
+            if amnt >= 0:
+                break
+            else:
+                amnt = reinput_amnt(date, apt, tenant)
+        except ValueError:
+            amnt = reinput_amnt(date, apt, tenant)
+    return amnt
+
+
+def validate_date(date_text):
+    """Validates date before continuing"""
+    while True:
+        try:
+            date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
+            break
+        except ValueError:
+            clear_screen()
+            spacer()
+            print(
+                "That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
+            )
+            date_text = input("\nDate (MM-DD-YYYY): ").strip()
+    return date
+
+
 def add_tip(tips_jar, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
         spacer()
         date_text = input("Date (MM-DD-YYYY): ").strip()
-        while True:
-            try:
-                date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
-                clear_screen()
-                spacer()
-                print(f"Date (MM-DD-YYYY): {date}")
-                break
-            except ValueError:
-                clear_screen()
-                spacer()
-                print(
-                    "That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
-                )
-                date_text = input("\nDate (MM-DD-YYYY): ").strip()
-
+        date = validate_date(date_text)
+        clear_screen()
+        spacer()
+        print(f"Date (MM-DD-YYYY): {date}")
         spacer()
         apt = input("Apartment: ").strip().title()
         spacer()
         tenant = input("Tenant Name: ").strip().title()
         spacer()
         amnt = input("Amount: ").strip()
-        while True:
-            try:
-                amnt = float(amnt)
-                if amnt >= 0:
-                    break
-                else:
-                    clear_screen()
-                    spacer()
-                    print(f"Date (MM-DD-YYYY): {date}")
-                    spacer()
-                    print(f"Apartment: {apt}")
-                    spacer()
-                    print(f"Tenant Name: {tenant}")
-                    spacer()
-                    print(
-                        "That input is invalid.\n\nPlease input a positive dollar amount"
-                    )
-                    amnt = input("\nAmount: ").strip()
-            except ValueError:
-                clear_screen()
-                spacer()
-                print(f"Date (MM-DD-YYYY): {date}")
-                spacer()
-                print(f"Apartment: {apt}")
-                spacer()
-                print(f"Tenant Name: {tenant}")
-                spacer()
-                print("That input is invalid.\n\nPlease input a valid dollar amount")
-                amnt = input("\nAmount: ").strip()
+        amnt = validate_amnt(amnt, date, apt, tenant)
         spacer()
         tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
         spacer()
@@ -164,6 +170,30 @@ def print_edit_options():
     print("\n1. Date\n2. Apartment\n3. Tenant\n4. Amount\n5. Tip Type\n6. Description")
 
 
+def validate_id(tips_jar):
+    """Validates ID before continuing"""
+    while True:
+        wanted_id = input("ID: ").strip()
+        while not wanted_id.isdigit():
+            clear_screen()
+            show_all_tips(tips_jar)
+            wanted_id = input(
+                "\nInput a valid ID number thats on the list.\n\nID: "
+            ).strip()
+        wanted_id = int(wanted_id)
+
+        found = False
+        for tip in tips_jar:
+            if tip["ID"] == wanted_id:
+                found = True
+        if found:
+            break
+        clear_screen()
+        show_all_tips(tips_jar)
+        print("\nInput a valid ID number thats on the list.\n")
+    return wanted_id
+
+
 def edit_tip(tips_jar):
     if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
@@ -171,41 +201,19 @@ def edit_tip(tips_jar):
     else:
         show_all_tips(tips_jar)
         print("\nInput the ID of the tip you'd like to edit\n")
-        while True:
-            wanted_id = input("ID: ")
-            while not wanted_id.isdigit():
-                wanted_id = input(
-                    "\nInput a valid ID number thats on the list.\n\nID: "
-                )
-            wanted_id = int(wanted_id)
-
-            found = False
-            for tip in tips_jar:
-                if tip["ID"] == wanted_id:
-                    found = True
-            if found:
-                break
-            print("\nInput a valid ID number thats on the list.\n")
-
+        wanted_id = validate_id(tips_jar)
         print_edit_options()
-        wanted_field = input("\nField to edit(1-6): ")
+        wanted_field = input("\nField to edit(1-6): ").strip()
         while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
-            wanted_field = input("\nInput a valid field number.\n\nField(1-6): ")
+            wanted_field = input(
+                "\nInput a valid field number.\n\nField(1-6): "
+            ).strip()
         if int(wanted_field) == 1:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
-                    tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
-                    while True:
-                        try:
-                            tip["Date"] = (
-                                datetime.strptime(tip["Date"], "%m-%d-%Y")
-                            ).strftime("%m-%d-%Y")
-                            break
-                        except ValueError:
-                            print(
-                                "\nThat input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
-                            )
-                            tip["Date"] = input("\nDate (MM-DD-YYYY): ").strip()
+                    date_text = input("\nDate (MM-DD-YYYY): ").strip()
+                    date = validate_date(date_text)
+                    tip["Date"] = date
         elif int(wanted_field) == 2:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
@@ -247,9 +255,22 @@ def edit_tip(tips_jar):
         press_enter()
 
 
-def remove_tip():
-    print("Removing is a work in progress...")
-    press_enter()
+def remove_tip(tips_jar):
+    if len(tips_jar) == 0:
+        print("\nThere are no tips yet.")
+        press_enter()
+    else:
+        show_all_tips(tips_jar)
+        print("\nInput the ID of the tip you'd like to remove.\n")
+        wanted_id = validate_id(tips_jar)
+        for i, tip in enumerate(tips_jar):
+            if tip["ID"] == wanted_id:
+                tips_jar.pop(i)
+                break
+        clear_screen()
+        show_all_tips(tips_jar)
+        print("\nThe selection has been removed.\n")
+        press_enter()
 
 
 def show_all_tips(tips_jar):
@@ -288,9 +309,7 @@ def sort_tips():
 
 def total_math(tips_jar):
     """Adds each value in Amount of each tip in a list and sums it up"""
-    tips_total = []
-    for tip in tips_jar:
-        tips_total.append(tip["Amount"])
+    tips_total = [tip["Amount"] for tip in tips_jar]
     total = sum(tips_total)
     return total
 
@@ -312,7 +331,7 @@ def main():
         main_menu_box()
         print()
         print_menu()
-        user_input = input("\nChoose your option(1 - 8): ")
+        user_input = input("\nChoose your option(1 - 8): ").strip()
         print()
         while not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
             clear_screen()
@@ -320,7 +339,7 @@ def main():
             print()
             print_menu()
             print("\nPlease enter a number between 1 and 8.")
-            user_input = input("\nChoose your option(1 - 8): ")
+            user_input = input("\nChoose your option(1 - 8): ").strip()
             continue
         user_input = int(user_input)
         if user_input == 8:

@@ -49,6 +49,9 @@ As of right now empty fields work for most of these features. All work in progre
 - Year-to-year comparison
 - A visual interface
 - Access from other devices
+- Connection to Excel
+- Analytics
+- 
 
 ## Design
 Each operation (add, remove, edit, search, sort, total) lives in its own
