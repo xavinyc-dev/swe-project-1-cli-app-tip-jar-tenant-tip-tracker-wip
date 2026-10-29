@@ -91,7 +91,6 @@ def validate_amnt(amnt, date, apt, tenant):
                 break
             else:
                 amnt = reinput_amnt(date, apt, tenant)
-                continue
         except ValueError:
             amnt = reinput_amnt(date, apt, tenant)
     return amnt
@@ -165,6 +164,29 @@ def print_edit_options():
     print("\n1. Date\n2. Apartment\n3. Tenant\n4. Amount\n5. Tip Type\n6. Description")
 
 
+def validate_id(tips_jar):
+    while True:
+        wanted_id = input("ID: ").strip()
+        while not wanted_id.isdigit():
+            clear_screen()
+            show_all_tips(tips_jar)
+            wanted_id = input(
+                "\nInput a valid ID number thats on the list.\n\nID: "
+            ).strip()
+        wanted_id = int(wanted_id)
+
+        found = False
+        for tip in tips_jar:
+            if tip["ID"] == wanted_id:
+                found = True
+        if found:
+            break
+        clear_screen()
+        show_all_tips(tips_jar)
+        print("\nInput a valid ID number thats on the list.\n")
+    return wanted_id
+
+
 def edit_tip(tips_jar):
     if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
@@ -172,22 +194,7 @@ def edit_tip(tips_jar):
     else:
         show_all_tips(tips_jar)
         print("\nInput the ID of the tip you'd like to edit\n")
-        while True:
-            wanted_id = input("ID: ").strip()
-            while not wanted_id.isdigit():
-                wanted_id = input(
-                    "\nInput a valid ID number thats on the list.\n\nID: "
-                ).strip()
-            wanted_id = int(wanted_id)
-
-            found = False
-            for tip in tips_jar:
-                if tip["ID"] == wanted_id:
-                    found = True
-            if found:
-                break
-            print("\nInput a valid ID number thats on the list.\n")
-
+        wanted_id = validate_id(tips_jar)
         print_edit_options()
         wanted_field = input("\nField to edit(1-6): ").strip()
         while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
@@ -256,25 +263,17 @@ def remove_tip(tips_jar):
         print("\nThere are no tips yet.")
         press_enter()
     else:
-        while True:
-            show_all_tips(tips_jar)
-            remove_id = input(
-                "\nWhich tip would you like to remove.\n\nInput ID: "
-            ).strip()
-            for i, tip in enumerate(tips_jar):
-                if tip["ID"] == int(remove_id):
-                    tips_jar.pop(i)
-                    break
-                else:
-                    print(
-                        "\nThat tip ID does not exist.\n\nPlease input a valid ID from the list."
-                    )
-                    continue
-            clear_screen()
-            print("\nThe selection has been removed.\n")
-            show_all_tips(tips_jar)
-            press_enter()
-            break
+        show_all_tips(tips_jar)
+        print("\nInput the ID of the tip you'd like to remove.\n")
+        wanted_id = validate_id(tips_jar)
+        for i, tip in enumerate(tips_jar):
+            if tip["ID"] == wanted_id:
+                tips_jar.pop(i)
+                break
+        clear_screen()
+        show_all_tips(tips_jar)
+        print("\nThe selection has been removed.\n")
+        press_enter()
 
 
 def show_all_tips(tips_jar):
