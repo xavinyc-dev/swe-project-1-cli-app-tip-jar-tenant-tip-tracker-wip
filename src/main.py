@@ -198,6 +198,12 @@ def validate_id(tips_jar):
     return wanted_id
 
 
+def reprint_all_tips(tips_jar):
+    """Reprints table of tips"""
+    clear_screen()
+    show_all_tips(tips_jar)
+
+
 def edit_tip(tips_jar):
     if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
@@ -206,6 +212,8 @@ def edit_tip(tips_jar):
         show_all_tips(tips_jar)
         print("\nInput the ID of the tip you'd like to edit\n")
         wanted_id = validate_id(tips_jar)
+        reprint_all_tips(tips_jar)
+        print(f"You are editing tip {wanted_id}.")
         print_edit_options()
         wanted_field = input("\nField to edit(1-6): ").strip()
         while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
@@ -215,48 +223,42 @@ def edit_tip(tips_jar):
         if int(wanted_field) == 1:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
+                    reprint_all_tips(tips_jar)
                     date_text = input("\nDate (MM-DD-YYYY): ").strip()
                     date = validate_date(date_text)
                     tip["Date"] = date
         elif int(wanted_field) == 2:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
+                    reprint_all_tips(tips_jar)
                     tip["Apartment"] = input("\nApartment: ").strip().title()
         elif int(wanted_field) == 3:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
+                    reprint_all_tips(tips_jar)
                     tip["Tenant"] = input("\nTenant: ").strip().title()
         elif int(wanted_field) == 4:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
-                    tip["Amount"] = input("\nAmount: ").strip()
-                    amnt = tip["Amount"]
-                    while True:
-                        try:
-                            amnt = float(amnt)
-                            if amnt >= 0:
-                                break
-                            else:
-                                print(
-                                    "\nThat input is invalid.\n\nPlease input a positive dollar amount"
-                                )
-                                amnt = input("\nAmount: ").strip()
-                        except ValueError:
-                            print(
-                                "\nThat input is invalid.\n\nPlease input a valid dollar amount"
-                            )
-                            amnt = input("\nAmount: ").strip()
-                    tip["Amount"] = amnt
+                    reprint_all_tips(tips_jar)
+                    amnt = input("\nAmount: ").strip()
+                    while not validate_amnt(amnt):
+                        reprint_all_tips(tips_jar)
+                        amnt = reinput_amnt()
+                    tip["Amount"] = float(amnt)
         elif int(wanted_field) == 5:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
+                    reprint_all_tips(tips_jar)
                     tip["Tip Type"] = (
                         input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
                     )
         elif int(wanted_field) == 6:
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
+                    reprint_all_tips(tips_jar)
                     tip["Description"] = input("\nDescription: ").strip()
+        reprint_all_tips(tips_jar)
         print("\nAny edits have been saved!")
         press_enter()
 
