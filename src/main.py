@@ -1,6 +1,8 @@
 from datetime import datetime
 import os
 
+DATE_FORMAT = "%m-%d-%Y"
+
 
 def title_box():
     """Prints the title with box"""
@@ -100,7 +102,7 @@ def validate_date(date_text):
     """Validates date before continuing"""
     while True:
         try:
-            date = (datetime.strptime(date_text, "%m-%d-%Y")).strftime("%m-%d-%Y")
+            date = (datetime.strptime(date_text, DATE_FORMAT)).strftime(DATE_FORMAT)
             break
         except ValueError:
             clear_screen()
@@ -151,8 +153,7 @@ def add_tip(tips_jar, tip_id):
 
         tips_jar.append(tips)
         tip_id += 1
-        print("You have added a tip to your tip jar!")
-        spacer()
+        print("\nYou have added a tip to your tip jar!")
         response = input(
             "Whats Next?\n\n1. Add another tip         2. Main Menu\n\n:"
         ).strip()
@@ -160,7 +161,7 @@ def add_tip(tips_jar, tip_id):
             clear_screen()
             print("\nInvalid response. Choose 1 or 2.")
             response = input(
-                "\nWhats Next?\n\n1. Add another tip         2. Main Menu\n\n:"
+                "\nWhats Next?\n\n1. Add another tip         2. Main Menu\n\n: "
             ).strip()
         if response == "1":
             clear_screen()
