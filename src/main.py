@@ -26,14 +26,14 @@ def main_menu_box():
 
 def print_menu():
     """Function for printing main menu"""
-    print("1. Add a Tip.")
-    print("2. Edit a tip.")
-    print("3. Remove a tip.")
-    print("4. Show all tips.")
-    print("5. Search tips. (by year or by apartment)(Under Development)")
-    print("6. Sort tips. (by date or by amount)(Under Development)")
-    print("7. Show tips total amount.")
-    print("8. Quit")
+    print("\n1. Add a Tip.")
+    print("\n2. Edit a tip.")
+    print("\n3. Remove a tip.")
+    print("\n4. Show all tips.")
+    print("\n5. Search tips. (by year or amount)(Under Development)")
+    print("\n6. Sort tips. (by date or by amount)")
+    print("\n7. Show tips total amount.")
+    print("\n8. Quit")
 
 
 def selects_option(user_input, tips_jar, tip_id):
@@ -46,14 +46,14 @@ def selects_option(user_input, tips_jar, tip_id):
     elif user_input == 3:
         remove_tip(tips_jar)
     elif user_input == 4:
-        show_all_tips(tips_jar)
+        display_all_tips(tips_jar)
         press_enter()
     elif user_input == 5:
         search_tips()
     elif user_input == 6:
         sort_tips(tips_jar)
     elif user_input == 7:
-        show_tip_total(total_math(tips_jar))
+        show_tip_total(total_tips_math(tips_jar))
     return tip_id
 
 
@@ -181,7 +181,7 @@ def validate_id(tips_jar):
         wanted_id = input("ID: ").strip()
         while not wanted_id.isdigit():
             clear_screen()
-            show_all_tips(tips_jar)
+            display_all_tips(tips_jar)
             wanted_id = input(
                 "\nInput a valid ID number thats on the list.\n\nID: "
             ).strip()
@@ -194,7 +194,7 @@ def validate_id(tips_jar):
         if found:
             break
         clear_screen()
-        show_all_tips(tips_jar)
+        display_all_tips(tips_jar)
         print("\nInput a valid ID number thats on the list.\n")
     return wanted_id
 
@@ -202,7 +202,7 @@ def validate_id(tips_jar):
 def reprint_all_tips(tips_jar):
     """Reprints table of tips"""
     clear_screen()
-    show_all_tips(tips_jar)
+    display_all_tips(tips_jar)
 
 
 def edit_tip(tips_jar):
@@ -210,7 +210,7 @@ def edit_tip(tips_jar):
         print("\nThere are no tips yet.")
         press_enter()
     else:
-        show_all_tips(tips_jar)
+        display_all_tips(tips_jar)
         print("\nInput the ID of the tip you'd like to edit\n")
         wanted_id = validate_id(tips_jar)
         reprint_all_tips(tips_jar)
@@ -269,7 +269,7 @@ def remove_tip(tips_jar):
         print("\nThere are no tips yet.")
         press_enter()
     else:
-        show_all_tips(tips_jar)
+        display_all_tips(tips_jar)
         print("\nInput the ID of the tip you'd like to remove.\n")
         wanted_id = validate_id(tips_jar)
         for i, tip in enumerate(tips_jar):
@@ -277,12 +277,12 @@ def remove_tip(tips_jar):
                 tips_jar.pop(i)
                 break
         clear_screen()
-        show_all_tips(tips_jar)
+        display_all_tips(tips_jar)
         print("\nThe selection has been removed.\n")
         press_enter()
 
 
-def show_all_tips(tips_jar):
+def display_all_tips(tips_jar):
     """Displays the tips in a certain format"""
     if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
@@ -313,7 +313,7 @@ def search_tips():
     press_enter()
 
 
-def sort_selection(tips_jar):
+def user_sort_selection(tips_jar):
     """Users initial selection for how to sort the tips"""
     selection = input(
         "\n\nSort By:\n\n1. Highest Amount\n\n2. Lowest Amount\n\n3. Menu\n\n"
@@ -324,14 +324,14 @@ def sort_selection(tips_jar):
         and int(selection) != 2
         and int(selection) != 3
     ):
-        selection = reinput_selection(tips_jar)
+        selection = reinput_sort_selection(tips_jar)
     return int(selection)
 
 
-def reinput_selection(on_screen):
+def reinput_sort_selection(on_screen):
     """Reinput user selection if input was invalid"""
     clear_screen()
-    show_all_tips(on_screen)
+    display_all_tips(on_screen)
     selection = input(
         "\nPlease input a valid option:\n\nSort By:\n\n1. Highest Amount\n\n2. Lowest Amount\n\n3. Menu\n\n"
     ).strip()
@@ -367,20 +367,20 @@ def sort_tips(tips_jar):
         print("\nThere are no tips yet.")
         press_enter()
     else:
-        show_all_tips(tips_jar)
+        display_all_tips(tips_jar)
         on_screen = tips_jar
         while True:
-            selection = sort_selection(on_screen)
+            selection = user_sort_selection(on_screen)
             if selection == 3:
                 clear_screen()
                 break
             sorted_tips = sort_amount(selection, tips_jar)
             on_screen = sorted_tips
             clear_screen()
-            show_all_tips(sorted_tips)
+            display_all_tips(sorted_tips)
 
 
-def total_math(tips_jar):
+def total_tips_math(tips_jar):
     """Adds each value in Amount of each tip in a list and sums it up"""
     tips_total = [tip["Amount"] for tip in tips_jar]
     total = sum(tips_total)
