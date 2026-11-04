@@ -51,7 +51,7 @@ def selects_option(user_input, tips_jar, tip_id):
     elif user_input == 5:
         search_tips()
     elif user_input == 6:
-        sort_tips()
+        sort_tips(tips_jar)
     elif user_input == 7:
         show_tip_total(total_math(tips_jar))
     return tip_id
@@ -286,7 +286,9 @@ def show_all_tips(tips_jar):
     """Displays the tips in a certain format"""
     if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
+        press_enter()
     else:
+        print("\n_TIPS_JAR_\n")
         for tip in (
             tips_jar
         ):  # tip contains the tip information from a single dictionary each pass
@@ -311,9 +313,71 @@ def search_tips():
     press_enter()
 
 
-def sort_tips():
-    print("Sorting is a work in progress...")
-    press_enter()
+def sort_selection(tips_jar):
+    """Users initial selection for how to sort the tips"""
+    selection = input(
+        "\n\nSort By:\n\n1. Highest Amount\n\n2. Lowest Amount\n\n3. Menu\n\n"
+    ).strip()
+    while (
+        not selection.isdigit()
+        or int(selection) != 1
+        and int(selection) != 2
+        and int(selection) != 3
+    ):
+        selection = reinput_selection(tips_jar)
+    return int(selection)
+
+
+def reinput_selection(on_screen):
+    """Reinput user selection if input was invalid"""
+    clear_screen()
+    show_all_tips(on_screen)
+    selection = input(
+        "\nPlease input a valid option:\n\nSort By:\n\n1. Highest Amount\n\n2. Lowest Amount\n\n3. Menu\n\n"
+    ).strip()
+    return selection
+
+
+def sort_amount(selection, tips_jar):
+    """Sorts the amount of tips from high to low or low to high"""
+    if selection == 1:
+        high_to_low = sorted(tips_jar, reverse=True, key=return_amount)
+        return high_to_low
+    elif selection == 2:
+        low_to_high = sorted(tips_jar, key=return_amount)
+        return low_to_high
+
+
+def return_date(tip):
+    """Returns the date from the tip in date format"""
+    date_text = tip["Date"]
+    date = datetime.strptime(date_text, DATE_FORMAT)
+    return date
+
+
+def return_amount(tip):
+    """Returns the amount value from the tip"""
+    amnt = tip["Amount"]
+    return amnt
+
+
+def sort_tips(tips_jar):
+    """Sorts tips by amount or date"""
+    if len(tips_jar) == 0:
+        print("\nThere are no tips yet.")
+        press_enter()
+    else:
+        show_all_tips(tips_jar)
+        on_screen = tips_jar
+        while True:
+            selection = sort_selection(on_screen)
+            if selection == 3:
+                clear_screen()
+                break
+            sorted_tips = sort_amount(selection, tips_jar)
+            on_screen = sorted_tips
+            clear_screen()
+            show_all_tips(sorted_tips)
 
 
 def total_math(tips_jar):
