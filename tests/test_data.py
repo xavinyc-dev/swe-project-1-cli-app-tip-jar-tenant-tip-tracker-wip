@@ -1,6 +1,6 @@
 from datetime import datetime
 import pytest
-from src.main import (
+from src.data import (
     validate_amnt,
     total_tips_math,
     return_amount,
