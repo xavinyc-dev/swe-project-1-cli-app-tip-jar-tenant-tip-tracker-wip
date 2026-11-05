@@ -1,3 +1,4 @@
+from datetime import datetime
 import pytest
 from src.main import (
     validate_amnt,
@@ -6,6 +7,36 @@ from src.main import (
     return_date,
     sort_amount,
 )
+
+tips_jar = [
+    {
+        "ID": 1,
+        "Tenant": "Xavi",
+        "Apartment": "1202",
+        "Amount": 25.00,
+        "Tip Type": "Cash",
+        "Description": "",
+        "Date": "12-25-2025",
+    },
+    {
+        "ID": 2,
+        "Tenant": "Elisa",
+        "Apartment": "1203",
+        "Amount": 55.25,
+        "Tip Type": "Cash",
+        "Description": "",
+        "Date": "12-26-2025",
+    },
+    {
+        "ID": 3,
+        "Tenant": "Michael",
+        "Apartment": "1204",
+        "Amount": 33.25,
+        "Tip Type": "Cash",
+        "Description": "",
+        "Date": "01-26-2026",
+    },
+]
 
 
 def test_validate_amnt_is_positive():
@@ -22,10 +53,84 @@ def test_validate_amnt_is_digit():
     assert validate_amnt("") is False
 
 
-# def test_total_tips_math():
+def test_total_tips_math():
+    """Adds all the tips amounts to one value"""
+    assert total_tips_math(tips_jar) == 113.5
 
-# def test_return_amount():
 
-# def test_return_date():
+def test_return_amount():
+    """Returns the amount value of one tip"""
+    assert return_amount(tips_jar[0]) == 25.00
+    assert return_amount(tips_jar[1]) == 55.25
+    assert return_amount(tips_jar[2]) == 33.25
 
-# def test_sort_amount():
+
+def test_return_date():
+    """Turns date stored as string into date format then returns"""
+    assert return_date(tips_jar[0]) == datetime(2025, 12, 25)
+    assert return_date(tips_jar[1]) == datetime(2025, 12, 26)
+    assert return_date(tips_jar[2]) == datetime(2026, 1, 26)
+
+
+def test_sort_amount():
+    """sorts the tips high to low or low to high based on selection"""
+    # High to low
+    assert sort_amount(1, tips_jar) == [
+        {
+            "ID": 2,
+            "Tenant": "Elisa",
+            "Apartment": "1203",
+            "Amount": 55.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-26-2025",
+        },
+        {
+            "ID": 3,
+            "Tenant": "Michael",
+            "Apartment": "1204",
+            "Amount": 33.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "01-26-2026",
+        },
+        {
+            "ID": 1,
+            "Tenant": "Xavi",
+            "Apartment": "1202",
+            "Amount": 25.00,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-25-2025",
+        },
+    ]
+    # Low to High
+    assert sort_amount(2, tips_jar) == [
+        {
+            "ID": 1,
+            "Tenant": "Xavi",
+            "Apartment": "1202",
+            "Amount": 25.00,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-25-2025",
+        },
+        {
+            "ID": 3,
+            "Tenant": "Michael",
+            "Apartment": "1204",
+            "Amount": 33.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "01-26-2026",
+        },
+        {
+            "ID": 2,
+            "Tenant": "Elisa",
+            "Apartment": "1203",
+            "Amount": 55.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-26-2025",
+        },
+    ]

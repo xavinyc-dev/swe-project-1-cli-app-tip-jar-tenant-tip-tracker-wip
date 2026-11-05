@@ -102,7 +102,9 @@ def validate_date(date_text):
     """Validates date before continuing"""
     while True:
         try:
-            date = (datetime.strptime(date_text, DATE_FORMAT)).strftime(DATE_FORMAT)
+            date = (datetime.strptime(date_text, DATE_FORMAT)).strftime(
+                DATE_FORMAT
+            )  # Checks if date can be turned into valid date
             break
         except ValueError:
             clear_screen()
