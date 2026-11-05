@@ -7,6 +7,7 @@ from src.main import (
     return_date,
     sort_amount,
     sort_date,
+    transform_date,
 )
 
 tips_jar = [
@@ -199,3 +200,9 @@ def test_sort_date():
             "Date": "01-26-2026",
         },
     ]
+
+
+def test_transform_date():
+    """Transforms date into correct format"""
+    assert transform_date("12-25-2025") == "12-25-2025"
+    assert transform_date("1-2-2025") == "01-02-2025"

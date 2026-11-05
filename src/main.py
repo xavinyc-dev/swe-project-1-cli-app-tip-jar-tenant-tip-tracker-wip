@@ -98,21 +98,33 @@ def validate_amnt(amnt):
         return False
 
 
-def validate_date(date_text):
-    """Validates date before continuing"""
-    while True:
-        try:
-            date = (datetime.strptime(date_text, DATE_FORMAT)).strftime(
-                DATE_FORMAT
-            )  # Checks if date can be turned into valid date
-            break
-        except ValueError:
-            clear_screen()
-            spacer()
-            print(
-                "That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between."
-            )
-            date_text = input("\nDate (MM-DD-YYYY): ").strip()
+def input_year():
+    """Input the year to search tips"""
+    year = input("Search Year:(YYYY) ").strip()
+    return year
+
+
+def reinput_date():
+    """Re input the date"""
+    print("That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between.")
+    date = input("\nDate (MM-DD-YYYY): ").strip()
+    return date
+
+
+def validate_date(date):
+    """Validates date is valid using datetime before continuing"""
+    try:
+        datetime.strptime(
+            date, DATE_FORMAT
+        )  # Checks if date can be turned into valid date
+        return True
+    except ValueError:
+        return False
+
+
+def transform_date(date):
+    """Transforms date into correct format to store"""
+    date = (datetime.strptime(date, DATE_FORMAT)).strftime(DATE_FORMAT)
     return date
 
 
@@ -120,8 +132,12 @@ def add_tip(tips_jar, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
         spacer()
-        date_text = input("Date (MM-DD-YYYY): ").strip()
-        date = validate_date(date_text)
+        date = input("Date (MM-DD-YYYY): ").strip()
+        while not validate_date(date):
+            clear_screen()
+            spacer()
+            date = reinput_date()
+        date = transform_date(date)
         clear_screen()
         spacer()
         print(f"Date (MM-DD-YYYY): {date}")
@@ -231,8 +247,11 @@ def edit_tip(tips_jar):
             for tip in tips_jar:
                 if tip["ID"] == wanted_id:
                     reprint_all_tips(tips_jar)
-                    date_text = input("\nDate (MM-DD-YYYY): ").strip()
-                    date = validate_date(date_text)
+                    date = input("\nDate (MM-DD-YYYY): ").strip()
+                    while not validate_date(date):
+                        reprint_all_tips(tips_jar)
+                        date = reinput_date()
+                    date = transform_date(date)
                     tip["Date"] = date
         elif int(wanted_field) == 2:
             for tip in tips_jar:
@@ -324,14 +343,7 @@ def user_sort_selection(tips_jar):
     selection = input(
         "\n\nSort By:\n1. Highest Amount\n2. Lowest Amount\n3. Most Recent Date\n4. Furthest Date\n5. Menu\n\n"
     ).strip()
-    while (
-        not selection.isdigit()
-        or int(selection) != 1
-        and int(selection) != 2
-        and int(selection) != 3
-        and int(selection) != 4
-        and int(selection) != 5
-    ):
+    while not selection.isdigit() or not 0 < int(selection) < 6:
         selection = reinput_sort_selection(tips_jar)
     return int(selection)
 
