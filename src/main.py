@@ -299,21 +299,37 @@ def edit_tip(tips_jar):
 
 
 def remove_tip(tips_jar):
-    if len(tips_jar) == 0:
-        print("\nThere are no tips yet.")
-        press_enter()
-    else:
-        display_all_tips(tips_jar)
-        print("\nInput the ID of the tip you'd like to remove.\n")
-        wanted_id = validate_id(tips_jar)
-        for i, tip in enumerate(tips_jar):
-            if tip["ID"] == wanted_id:
-                tips_jar.pop(i)
+    while True:
+        if len(tips_jar) == 0:
+            print("\nThere are no tips yet.")
+            press_enter()
+            break
+        else:
+            display_all_tips(tips_jar)
+            print("\nInput the ID of the tip you'd like to remove.\n")
+            wanted_id = validate_id(tips_jar)
+            for i, tip in enumerate(tips_jar):
+                if tip["ID"] == wanted_id:
+                    tips_jar.pop(i)
+                    break
+            clear_screen()
+            print("\nThe selection has been removed.\n")
+            display_all_tips(tips_jar)
+            response = input(
+                "\nWhats Next?\n\n1. Remove another tip         2. Main Menu\n\n:"
+            ).strip()
+            while response != "1" and response != "2":
+                clear_screen()
+                print("\nInvalid response. Choose 1 or 2.")
+                response = input(
+                    "\nWhats Next?\n\n1. Remove another tip         2. Main Menu\n\n: "
+                ).strip()
+            if response == "1":
+                clear_screen()
+                continue
+            elif response == "2":
+                clear_screen()
                 break
-        clear_screen()
-        display_all_tips(tips_jar)
-        print("\nThe selection has been removed.\n")
-        press_enter()
 
 
 def display_all_tips(tips_jar):
