@@ -9,6 +9,7 @@ from data import (
     validate_amnt,
     validate_date,
     validate_year,
+    return_tip_from_id,
 )
 
 
@@ -181,11 +182,7 @@ def validate_id(tips_jar):
             ).strip()
         wanted_id = int(wanted_id)
 
-        found = False
-        for tip in tips_jar:
-            if tip["ID"] == wanted_id:
-                found = True
-        if found:
+        if return_tip_from_id(wanted_id, tips_jar) is not None:
             break
         clear_screen()
         display_all_tips(tips_jar)
@@ -210,6 +207,7 @@ def edit_tip(tips_jar):
             wanted_id = validate_id(tips_jar)
             reprint_all_tips(tips_jar)
             print(f"\nYou are editing tip {wanted_id}.")
+            tip = return_tip_from_id(wanted_id, tips_jar)
             print_edit_options()
             wanted_field = input("\nField to edit(1-6): ").strip()
             while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
@@ -221,46 +219,34 @@ def edit_tip(tips_jar):
                     "\nInput a valid field number.\n\nField(1-6): "
                 ).strip()
             if int(wanted_field) == 1:
-                for tip in tips_jar:
-                    if tip["ID"] == wanted_id:
-                        reprint_all_tips(tips_jar)
-                        date = input("\nDate (MM-DD-YYYY): ").strip()
-                        while not validate_date(date):
-                            reprint_all_tips(tips_jar)
-                            date = reinput_date()
-                        date = transform_date(date)
-                        tip["Date"] = date
+                reprint_all_tips(tips_jar)
+                date = input("\nDate (MM-DD-YYYY): ").strip()
+                while not validate_date(date):
+                    reprint_all_tips(tips_jar)
+                    date = reinput_date()
+                date = transform_date(date)
+                tip["Date"] = date
             elif int(wanted_field) == 2:
-                for tip in tips_jar:
-                    if tip["ID"] == wanted_id:
-                        reprint_all_tips(tips_jar)
-                        tip["Apartment"] = input("\nApartment: ").strip().title()
+                reprint_all_tips(tips_jar)
+                tip["Apartment"] = input("\nApartment: ").strip().title()
             elif int(wanted_field) == 3:
-                for tip in tips_jar:
-                    if tip["ID"] == wanted_id:
-                        reprint_all_tips(tips_jar)
-                        tip["Tenant"] = input("\nTenant: ").strip().title()
+                reprint_all_tips(tips_jar)
+                tip["Tenant"] = input("\nTenant: ").strip().title()
             elif int(wanted_field) == 4:
-                for tip in tips_jar:
-                    if tip["ID"] == wanted_id:
-                        reprint_all_tips(tips_jar)
-                        amnt = input("\nAmount: ").strip()
-                        while not validate_amnt(amnt):
-                            reprint_all_tips(tips_jar)
-                            amnt = reinput_amnt()
-                        tip["Amount"] = float(amnt)
+                reprint_all_tips(tips_jar)
+                amnt = input("\nAmount: ").strip()
+                while not validate_amnt(amnt):
+                    reprint_all_tips(tips_jar)
+                    amnt = reinput_amnt()
+                tip["Amount"] = float(amnt)
             elif int(wanted_field) == 5:
-                for tip in tips_jar:
-                    if tip["ID"] == wanted_id:
-                        reprint_all_tips(tips_jar)
-                        tip["Tip Type"] = (
-                            input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
-                        )
+                reprint_all_tips(tips_jar)
+                tip["Tip Type"] = (
+                    input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
+                )
             elif int(wanted_field) == 6:
-                for tip in tips_jar:
-                    if tip["ID"] == wanted_id:
-                        reprint_all_tips(tips_jar)
-                        tip["Description"] = input("\nDescription: ").strip()
+                reprint_all_tips(tips_jar)
+                tip["Description"] = input("\nDescription: ").strip()
             reprint_all_tips(tips_jar)
             print("\nAny edits have been saved!")
             response = input(

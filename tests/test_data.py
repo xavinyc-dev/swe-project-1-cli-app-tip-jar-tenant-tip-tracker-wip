@@ -11,6 +11,7 @@ from src.data import (
     search_year,
     validate_date,
     validate_year,
+    search_tips_for_id,
 )
 
 tips_jar = [
@@ -260,3 +261,16 @@ def test_validate_year():
     assert validate_year("2023") is True
     assert validate_year("-2026") is False
     assert validate_year("") is False
+
+
+def test_search_tips_for_id():
+    assert search_tips_for_id(2, tips_jar) == {
+        "ID": 2,
+        "Tenant": "Elisa",
+        "Apartment": "1203",
+        "Amount": 55.25,
+        "Tip Type": "Cash",
+        "Description": "",
+        "Date": "12-26-2025",
+    }
+    assert search_tips_for_id(99, tips_jar) is None

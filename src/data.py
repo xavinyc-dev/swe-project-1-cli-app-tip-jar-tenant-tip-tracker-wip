@@ -86,3 +86,11 @@ def total_tips_math(tips_jar):
     tips_total = [tip["Amount"] for tip in tips_jar]
     total = sum(tips_total)
     return total
+
+
+def return_tip_from_id(wanted_id, tips_jar):
+    """Returns the dictionary with the matching ID or None if cant find it"""
+    for tip in tips_jar:
+        if tip["ID"] == wanted_id:
+            return tip
+    return None
