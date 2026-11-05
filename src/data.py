@@ -24,6 +24,7 @@ def validate_date(date):
 
 
 def validate_year(year):
+    """Validate the year format"""
     try:
         datetime.strptime(year, "%Y")
         return True
@@ -94,3 +95,10 @@ def return_tip_from_id(wanted_id, tips_jar):
         if tip["ID"] == wanted_id:
             return tip
     return None
+
+
+def remove_tip(wanted_id, tips_jar):
+    """Removes tip(dictionary) from list tips_jar with matching ID"""
+    tip = return_tip_from_id(wanted_id, tips_jar)
+    tips_jar.remove(tip)
+    return tips_jar

@@ -12,6 +12,7 @@ from src.data import (
     validate_date,
     validate_year,
     return_tip_from_id,
+    remove_tip,
 )
 
 tips_jar = [
@@ -264,6 +265,7 @@ def test_validate_year():
 
 
 def test_return_tip_from_id():
+    """Returns dictionary of tip from tips_jar with inputted id"""
     assert return_tip_from_id(2, tips_jar) == {
         "ID": 2,
         "Tenant": "Elisa",
@@ -274,3 +276,29 @@ def test_return_tip_from_id():
         "Date": "12-26-2025",
     }
     assert return_tip_from_id(99, tips_jar) is None
+
+
+# Only add tests above this to not accidentally delete anything until I learn about shallow and deep
+def test_remove_tip():
+    """Test remove tip from tips_jar list"""
+    copy_tips_jar = list(tips_jar)
+    assert remove_tip(2, copy_tips_jar) == [
+        {
+            "ID": 1,
+            "Tenant": "Xavi",
+            "Apartment": "1202",
+            "Amount": 25.00,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-25-2025",
+        },
+        {
+            "ID": 3,
+            "Tenant": "Michael",
+            "Apartment": "1204",
+            "Amount": 33.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "01-26-2026",
+        },
+    ]

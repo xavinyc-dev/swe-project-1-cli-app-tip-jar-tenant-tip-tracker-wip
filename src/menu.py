@@ -10,6 +10,7 @@ from data import (
     validate_date,
     validate_year,
     return_tip_from_id,
+    remove_tip,
 )
 
 
@@ -53,7 +54,7 @@ def selects_option(user_input, tips_jar, tip_id):
     elif user_input == 2:
         edit_tip(tips_jar)
     elif user_input == 3:
-        remove_tip(tips_jar)
+        remove_tip_menu(tips_jar)
     elif user_input == 4:
         display_all_tips(tips_jar)
         press_enter()
@@ -197,6 +198,7 @@ def reprint_all_tips(tips_jar):
 
 
 def edit_tip(tips_jar):
+    """Menu that takes user inputs to edit the values of a tip in tips_jar"""
     if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
         press_enter()
@@ -266,7 +268,8 @@ def edit_tip(tips_jar):
                 break
 
 
-def remove_tip(tips_jar):
+def remove_tip_menu(tips_jar):
+    """Menu that takes user input for selecting and removing tip."""
     while True:
         if len(tips_jar) == 0:
             print("\nThere are no tips yet.")
@@ -276,10 +279,7 @@ def remove_tip(tips_jar):
             display_all_tips(tips_jar)
             print("\nInput the ID of the tip you'd like to remove.\n")
             wanted_id = validate_id(tips_jar)
-            for i, tip in enumerate(tips_jar):
-                if tip["ID"] == wanted_id:
-                    tips_jar.pop(i)
-                    break
+            remove_tip(wanted_id, tips_jar)
             clear_screen()
             print("\nThe selection has been removed.\n")
             display_all_tips(tips_jar)
