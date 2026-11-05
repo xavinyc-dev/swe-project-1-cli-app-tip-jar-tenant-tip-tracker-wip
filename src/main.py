@@ -30,7 +30,7 @@ def print_menu():
     print("2. Edit a tip.")
     print("3. Remove a tip.")
     print("4. Show all tips.")
-    print("5. Search tips. (by year or amount)(Under Development)")
+    print("5. Search tips. (by year)")
     print("6. Sort tips. (by date or by amount)")
     print("7. Show tips total amount.")
     print("8. Quit")
@@ -49,7 +49,7 @@ def selects_option(user_input, tips_jar, tip_id):
         display_all_tips(tips_jar)
         press_enter()
     elif user_input == 5:
-        search_tips()
+        search_tips(tips_jar)
     elif user_input == 6:
         sort_tips(tips_jar)
     elif user_input == 7:
@@ -96,12 +96,6 @@ def validate_amnt(amnt):
         return amnt >= 0
     except ValueError:
         return False
-
-
-def input_year():
-    """Input the year to search tips"""
-    year = input("Search Year:(YYYY) ").strip()
-    return year
 
 
 def reinput_date():
@@ -333,9 +327,72 @@ def display_all_tips(tips_jar):
             print("-" * len(row))
 
 
-def search_tips():
-    print("Searching is a work in progress...")
-    press_enter()
+# def calc_this_year():
+#     current_year = datetime.now().year
+#     return current_year
+
+
+def input_year():
+    """Input the year to search tips"""
+    year = input(
+        "\nInput year you'd like to search(YYYY)\n\n(Input back to return to menu)\n\n:"
+    ).strip()
+    return year
+
+
+def validate_year(year):
+    try:
+        datetime.strptime(year, "%Y")
+        return True
+    except ValueError:
+        return False
+
+
+def reinput_year(on_screen):
+    """Re input the year if invalid from check"""
+    clear_screen()
+    display_all_tips(on_screen)
+    year = (
+        input(
+            "\nInput Valid Year.\n\nYear(YYYY):\n\n(Input back to return to menu)\n\n "
+        )
+        .strip()
+        .lower()
+    )
+    return year
+
+
+def search_year(year, tips_jar):
+    """Search The tips by year"""
+    searched_year = [tip for tip in tips_jar if tip["Date"][-4:] == year]
+    return searched_year
+
+
+def search_tips(tips_jar):
+    """Searches and outputs tips for specified year from user"""
+    if len(tips_jar) == 0:
+        print("\nThere are no tips yet.")
+        press_enter()
+    else:
+        on_screen = tips_jar
+        while True:
+            display_all_tips(on_screen)
+            year = input_year().lower()
+            while not validate_year(year) and year != "back":
+                year = reinput_year(on_screen)
+            if year == "back":
+                clear_screen()
+                break
+            searched_year = search_year(year, tips_jar)
+            if len(searched_year) == 0:
+                clear_screen()
+                display_all_tips(on_screen)
+                print("\nThere are no tips under that year.")
+                press_enter()
+                continue
+            on_screen = searched_year
+            clear_screen()
+            print(f"You are viewing tips from year {year}")
 
 
 def user_sort_selection(tips_jar):
@@ -353,7 +410,7 @@ def reinput_sort_selection(on_screen):
     clear_screen()
     display_all_tips(on_screen)
     selection = input(
-        "\nPlease input a valid option:\n\nSort By:\n\n1. Highest Amount\n\n2. Lowest Amount\n\n3. Most Recent Date\n\n4. Furthest Date\n\n5. Menu\n\n"
+        "\nPlease input a valid option:\nSort By:\n1. Highest Amount\n2. Lowest Amount\n3. Most Recent Date\n4. Furthest Date\n5. Menu\n\n"
     ).strip()
     return selection
 
