@@ -6,6 +6,7 @@ from src.main import (
     return_amount,
     return_date,
     sort_amount,
+    sort_date,
 )
 
 tips_jar = [
@@ -132,5 +133,69 @@ def test_sort_amount():
             "Tip Type": "Cash",
             "Description": "",
             "Date": "12-26-2025",
+        },
+    ]
+
+
+def test_sort_date():
+    """sorts the tips most recent to furthest date based on selection"""
+    # Most recent to furthest
+    assert sort_date(3, tips_jar) == [
+        {
+            "ID": 3,
+            "Tenant": "Michael",
+            "Apartment": "1204",
+            "Amount": 33.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "01-26-2026",
+        },
+        {
+            "ID": 2,
+            "Tenant": "Elisa",
+            "Apartment": "1203",
+            "Amount": 55.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-26-2025",
+        },
+        {
+            "ID": 1,
+            "Tenant": "Xavi",
+            "Apartment": "1202",
+            "Amount": 25.00,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-25-2025",
+        },
+    ]
+    # Furthest to most recent
+    assert sort_date(4, tips_jar) == [
+        {
+            "ID": 1,
+            "Tenant": "Xavi",
+            "Apartment": "1202",
+            "Amount": 25.00,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-25-2025",
+        },
+        {
+            "ID": 2,
+            "Tenant": "Elisa",
+            "Apartment": "1203",
+            "Amount": 55.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-26-2025",
+        },
+        {
+            "ID": 3,
+            "Tenant": "Michael",
+            "Apartment": "1204",
+            "Amount": 33.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "01-26-2026",
         },
     ]
