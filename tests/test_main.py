@@ -7,6 +7,10 @@ from src.main import (
     return_date,
     sort_amount,
     sort_date,
+    transform_date,
+    search_year,
+    validate_date,
+    validate_year,
 )
 
 tips_jar = [
@@ -199,3 +203,60 @@ def test_sort_date():
             "Date": "01-26-2026",
         },
     ]
+
+
+def test_transform_date():
+    """Transforms date into correct format"""
+    assert transform_date("12-25-2025") == "12-25-2025"
+    assert transform_date("1-2-2025") == "01-02-2025"
+
+
+def test_search_year():
+    """Returns list of tips in inputted year"""
+    assert search_year("2025", tips_jar) == [
+        {
+            "ID": 1,
+            "Tenant": "Xavi",
+            "Apartment": "1202",
+            "Amount": 25.00,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-25-2025",
+        },
+        {
+            "ID": 2,
+            "Tenant": "Elisa",
+            "Apartment": "1203",
+            "Amount": 55.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "12-26-2025",
+        },
+    ]
+    assert search_year("2026", tips_jar) == [
+        {
+            "ID": 3,
+            "Tenant": "Michael",
+            "Apartment": "1204",
+            "Amount": 33.25,
+            "Tip Type": "Cash",
+            "Description": "",
+            "Date": "01-26-2026",
+        }
+    ]
+
+
+def test_validate_date():
+    """Validate its a valid date using datetime library"""
+    assert validate_date("12-25-2025") is True
+    assert validate_date("1-25-2025") is True
+    assert validate_date("00-24-2020") is False
+    assert validate_date("") is False
+
+
+def test_validate_year():
+    """Validates input is a valid year"""
+    assert validate_year("2026") is True
+    assert validate_year("2023") is True
+    assert validate_year("-2026") is False
+    assert validate_year("") is False
