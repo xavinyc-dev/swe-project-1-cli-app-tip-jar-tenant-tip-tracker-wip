@@ -13,6 +13,7 @@ from src.data import (
     validate_year,
     return_tip_from_id,
     remove_tip,
+    build_tip,
 )
 
 tips_jar = [
@@ -276,6 +277,18 @@ def test_return_tip_from_id():
         "Date": "12-26-2025",
     }
     assert return_tip_from_id(99, tips_jar) is None
+
+
+def test_build_tip():
+    assert build_tip(1, "xavi", "1202W", 25.00, "zelle", "", "12-25-2025") == {
+        "ID": 1,
+        "Tenant": "Xavi",
+        "Apartment": "1202W",
+        "Amount": 25.00,
+        "Tip Type": "Zelle",
+        "Description": "",
+        "Date": "12-25-2025",
+    }
 
 
 # Only add tests above this to not accidentally delete anything until I learn about shallow and deep

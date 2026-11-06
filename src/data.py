@@ -102,3 +102,16 @@ def remove_tip(wanted_id, tips_jar):
     tip = return_tip_from_id(wanted_id, tips_jar)
     tips_jar.remove(tip)
     return tips_jar
+
+
+def build_tip(tip_id, tenant, apt, amnt, tip_type, desc, date):
+    tip = {
+        "ID": tip_id,
+        "Tenant": tenant.strip().title(),
+        "Apartment": apt.strip().title(),
+        "Amount": amnt,
+        "Tip Type": tip_type.strip().title(),
+        "Description": desc.strip(),
+        "Date": date,
+    }
+    return tip

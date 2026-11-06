@@ -11,6 +11,7 @@ from data import (
     validate_year,
     return_tip_from_id,
     remove_tip,
+    build_tip,
 )
 
 
@@ -106,9 +107,24 @@ def reinput_date():
     return date
 
 
+def ask_whats_next(menu):
+    """Asks user whats next at the end of inputs in menu"""
+    response = input(
+        f"\nWhats Next?\n\n1. {menu} another tip         2. Main Menu\n\n:"
+    ).strip()
+    while response != "1" and response != "2":
+        clear_screen()
+        print("\nInvalid response. Choose 1 or 2.")
+        response = input(
+            f"\nWhats Next?\n\n1. {menu} another tip         2. Main Menu\n\n: "
+        ).strip()
+    return response
+
+
 def add_tip(tips_jar, tip_id):
     """Adds the users input for each key value pair into a dictionary then into a list"""
     while True:
+        menu = "Add"
         spacer()
         date = input("Date (MM-DD-YYYY): ").strip()
         while not validate_date(date):
@@ -120,9 +136,9 @@ def add_tip(tips_jar, tip_id):
         spacer()
         print(f"Date (MM-DD-YYYY): {date}")
         spacer()
-        apt = input("Apartment: ").strip().title()
+        apt = input("Apartment: ")
         spacer()
-        tenant = input("Tenant Name: ").strip().title()
+        tenant = input("Tenant Name: ")
         spacer()
         amnt = input("Amount: ").strip()
         while not validate_amnt(amnt):
@@ -132,39 +148,24 @@ def add_tip(tips_jar, tip_id):
         amnt = float(amnt)
         print(f"Amount: ${amnt:.2f}")
         spacer()
-        tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
+        tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ")
         spacer()
-        desc = input("Description: ").strip()
+        desc = input("Description: ")
         spacer()
 
-        tips = {
-            "ID": tip_id,
-            "Tenant": tenant,
-            "Apartment": apt,
-            "Amount": amnt,
-            "Tip Type": tip_type,
-            "Description": desc,
-            "Date": date,
-        }
+        tip = build_tip(tip_id, tenant, apt, amnt, tip_type, desc, date)
 
-        tips_jar.append(tips)
+        tips_jar.append(tip)
         tip_id += 1
         print("\nYou have added a tip to your tip jar!")
-        response = input(
-            "\nWhats Next?\n\n1. Add another tip         2. Main Menu\n\n:"
-        ).strip()
-        while response != "1" and response != "2":
-            clear_screen()
-            print("\nInvalid response. Choose 1 or 2.")
-            response = input(
-                "\nWhats Next?\n\n1. Add another tip         2. Main Menu\n\n: "
-            ).strip()
+        response = ask_whats_next(menu)
         if response == "1":
             clear_screen()
             continue
         elif response == "2":
             clear_screen()
-            return tip_id
+            break
+    return tip_id
 
 
 def print_edit_options():
@@ -204,6 +205,7 @@ def edit_tip(tips_jar):
         press_enter()
     else:
         while True:
+            menu = "Edit"
             display_all_tips(tips_jar)
             print("\nInput the ID of the tip you'd like to edit\n")
             wanted_id = validate_id(tips_jar)
@@ -251,15 +253,7 @@ def edit_tip(tips_jar):
                 tip["Description"] = input("\nDescription: ").strip()
             reprint_all_tips(tips_jar)
             print("\nAny edits have been saved!")
-            response = input(
-                "\nWhats Next?\n\n1. Edit another tip         2. Main Menu\n\n:"
-            ).strip()
-            while response != "1" and response != "2":
-                clear_screen()
-                print("\nInvalid response. Choose 1 or 2.")
-                response = input(
-                    "\nWhats Next?\n\n1. Edit another tip         2. Main Menu\n\n: "
-                ).strip()
+            response = ask_whats_next(menu)
             if response == "1":
                 clear_screen()
                 continue
@@ -271,6 +265,7 @@ def edit_tip(tips_jar):
 def remove_tip_menu(tips_jar):
     """Menu that takes user input for selecting and removing tip."""
     while True:
+        menu = "Remove"
         if len(tips_jar) == 0:
             print("\nThere are no tips yet.")
             press_enter()
@@ -283,15 +278,7 @@ def remove_tip_menu(tips_jar):
             clear_screen()
             print("\nThe selection has been removed.\n")
             display_all_tips(tips_jar)
-            response = input(
-                "\nWhats Next?\n\n1. Remove another tip         2. Main Menu\n\n:"
-            ).strip()
-            while response != "1" and response != "2":
-                clear_screen()
-                print("\nInvalid response. Choose 1 or 2.")
-                response = input(
-                    "\nWhats Next?\n\n1. Remove another tip         2. Main Menu\n\n: "
-                ).strip()
+            response = ask_whats_next(menu)
             if response == "1":
                 clear_screen()
                 continue
@@ -418,5 +405,6 @@ def sort_tips(tips_jar):
 
 
 def show_tip_total(total):
+    """prints the tip total"""
     print(f"\nYour total income of tips: ${total:.2f}".title())
     press_enter()
