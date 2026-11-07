@@ -12,6 +12,10 @@ from data import (
     return_tip_from_id,
     remove_tip,
     build_tip,
+    clean_tenant,
+    clean_description,
+    clean_apartment,
+    clean_type,
 )
 
 
@@ -221,7 +225,7 @@ def edit_tip(tips_jar):
             print(f"\nYou are editing tip {wanted_id}.")
             tip = return_tip_from_id(wanted_id, tips_jar)
             print_edit_options()
-            wanted_field = input("\nField to edit(1-6): ").strip()
+            wanted_field = input("\nField to edit(1-6): ")
             while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
                 clear_screen()
                 reprint_all_tips(tips_jar)
@@ -240,10 +244,14 @@ def edit_tip(tips_jar):
                 tip["Date"] = date
             elif int(wanted_field) == 2:
                 reprint_all_tips(tips_jar)
-                tip["Apartment"] = input("\nApartment: ").strip().title()
+                apt = input("\nApartment: ")
+                apt = clean_apartment(apt)
+                tip["Apartment"] = apt
             elif int(wanted_field) == 3:
                 reprint_all_tips(tips_jar)
-                tip["Tenant"] = input("\nTenant: ").strip().title()
+                tenant = input("\nTenant: ")
+                tenant = clean_tenant(tenant)
+                tip["Tenant"] = tenant
             elif int(wanted_field) == 4:
                 reprint_all_tips(tips_jar)
                 amnt = input("\nAmount: ").strip()
@@ -253,12 +261,14 @@ def edit_tip(tips_jar):
                 tip["Amount"] = float(amnt)
             elif int(wanted_field) == 5:
                 reprint_all_tips(tips_jar)
-                tip["Tip Type"] = (
-                    input("Tip Type(Cash, Zelle, Gift Card…): ").strip().title()
-                )
+                tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ")
+                tip_type = clean_type(tip_type)
+                tip["Tip Type"] = tip_type
             elif int(wanted_field) == 6:
                 reprint_all_tips(tips_jar)
-                tip["Description"] = input("\nDescription: ").strip()
+                desc = input("\nDescription: ")
+                desc = clean_description(desc)
+                tip["Description"] = desc
             reprint_all_tips(tips_jar)
             print("\nAny edits have been saved!")
             response = ask_whats_next(menu)

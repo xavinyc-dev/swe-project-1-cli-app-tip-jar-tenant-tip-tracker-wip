@@ -106,13 +106,42 @@ def remove_tip(wanted_id, tips_jar):
 
 def build_tip(tip_id, tenant, apt, amnt, tip_type, desc, date):
     """Builds one tip dictionary and cleans the strings, date and amnt were cleaned on input to verify"""
+    apt = clean_apartment(apt)
+    tenant = clean_tenant(tenant)
+    tip_type = clean_type(tip_type)
+    desc = clean_description(desc)
     tip = {
         "ID": tip_id,
         "Date": date,
-        "Apartment": apt.strip().title(),
-        "Tenant": tenant.strip().title(),
+        "Apartment": apt,
+        "Tenant": tenant,
         "Amount": amnt,
-        "Tip Type": tip_type.strip().title(),
-        "Description": desc.strip(),
+        "Tip Type": tip_type,
+        "Description": desc,
     }
+
     return tip
+
+
+def clean_tenant(tenant):
+    """Cleaned the tenant input by stripping white space and using title"""
+    cleaned_tenant = tenant.strip().title()
+    return cleaned_tenant
+
+
+def clean_type(tip_type):
+    """Cleaned the tip_type input stripping white space and title"""
+    cleaned_type = tip_type.strip().title()
+    return cleaned_type
+
+
+def clean_apartment(apt):
+    """Cleaning the apartment input, all uppercase and stripping white space"""
+    cleaned_apartment = apt.strip().upper()
+    return cleaned_apartment
+
+
+def clean_description(desc):
+    """Cleaning description stripping white space"""
+    cleaned_description = desc.strip()
+    return cleaned_description

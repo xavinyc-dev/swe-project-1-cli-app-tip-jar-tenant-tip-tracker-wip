@@ -14,6 +14,10 @@ from src.data import (
     return_tip_from_id,
     remove_tip,
     build_tip,
+    clean_description,
+    clean_type,
+    clean_tenant,
+    clean_apartment,
 )
 
 tips_jar = [
@@ -323,3 +327,28 @@ def test_remove_tip():
             "Date": "01-26-2026",
         },
     ]
+
+
+def test_clean_apartment():
+    """Strips white space and capitalizes all characters"""
+    assert clean_apartment("  1202wa   ") == "1202WA"
+    assert clean_apartment(" 5d ") == "5D"
+
+
+def test_clean_tenant():
+    """Strips white space and capitalizes the first character of each word"""
+    assert clean_tenant("   xaVI  ") == "Xavi"
+    assert clean_tenant("   xaVier rodriGuez  ") == "Xavier Rodriguez"
+
+
+def test_clean_type():
+    """Strips white space and capitalizes the first character of each word"""
+    assert clean_type("  caSh aPp  ") == "Cash App"
+
+
+def test_clean_description():
+    """Strips the white space"""
+    assert (
+        clean_description("  Cleaning apartment for Ana paid Cash.   ")
+        == "Cleaning apartment for Ana paid Cash."
+    )
