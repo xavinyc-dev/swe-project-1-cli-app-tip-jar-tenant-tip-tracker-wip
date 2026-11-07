@@ -13,7 +13,7 @@ def main():
         main_menu_box()
         print()
         print_menu()
-        user_input = input("\nChoose your option(1 - 8): ").strip()
+        user_input = input("\nChoose your option (1 - 8): ").strip()
         print()
         while not user_input.isdigit() or int(user_input) > 8 or int(user_input) < 1:
             clear_screen()
@@ -21,7 +21,7 @@ def main():
             print()
             print_menu()
             print("\nPlease enter a number between 1 and 8.")
-            user_input = input("\nChoose your option(1 - 8): ").strip()
+            user_input = input("\nChoose your option (1 - 8): ").strip()
             continue
         user_input = int(user_input)
         if user_input == 8:

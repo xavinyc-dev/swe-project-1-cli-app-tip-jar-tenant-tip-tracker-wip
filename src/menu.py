@@ -28,6 +28,7 @@ def title_box():
 
 
 def spacer():
+    """Creates a long spacer line"""
     print("-" * 50)
 
 
@@ -42,12 +43,12 @@ def main_menu_box():
 def print_menu():
     """Function for printing main menu"""
     print("1. Add a Tip.")
-    print("2. Edit a tip.")
-    print("3. Remove a tip.")
-    print("4. Show all tips.")
-    print("5. Search tips. (by year)")
-    print("6. Sort tips. (by date or by amount)")
-    print("7. Show tips total amount.")
+    print("2. Edit a Tip.")
+    print("3. Remove a Tip.")
+    print("4. Show all Tips.")
+    print("5. Search Tips. (by year)")
+    print("6. Sort Tips. (by date or by amount)")
+    print("7. Show Tips total amount.")
     print("8. Quit")
 
 
@@ -73,6 +74,7 @@ def selects_option(user_input, tips_jar, tip_id):
 
 
 def press_enter():
+    """Pause for user, continues when pressing enter"""
     input("\nPress Enter to Continue...\n")
     clear_screen()
 
@@ -106,27 +108,27 @@ def reinput_amnt():
 
 def reinput_date():
     """Re input the date"""
-    print("That input is invalid.\n\nPlease input mm-dd-yyyy with dashes in between.")
+    print("That input is invalid.\n\nPlease input MM-DD-YYYY with dashes in between.")
     date = input("\nDate (MM-DD-YYYY): ").strip()
     return date
 
 
 def ask_whats_next(menu):
-    """Asks user whats next at the end of inputs in menu"""
+    """Asks user what's next at the end of inputs in menu"""
     response = input(
-        f"\nWhats Next?\n\n1. {menu} another tip         2. Main Menu\n\n:"
+        f"\nWhat's Next?\n\n1. {menu} another tip         2. Main Menu\n\n:"
     ).strip()
     while response != "1" and response != "2":
         clear_screen()
         print("\nInvalid response. Choose 1 or 2.")
         response = input(
-            f"\nWhats Next?\n\n1. {menu} another tip         2. Main Menu\n\n: "
+            f"\nWhat's Next?\n\n1. {menu} another tip         2. Main Menu\n\n: "
         ).strip()
     return response
 
 
 def add_tip(tips_jar, tip_id):
-    """Adds the users input for each key value pair into a dictionary then into a list"""
+    """Adds the user input for each key value pair into a dictionary then into a list"""
     while True:
         menu = "Add"
         spacer()
@@ -152,7 +154,7 @@ def add_tip(tips_jar, tip_id):
         amnt = float(amnt)
         print(f"Amount: ${amnt:.2f}")
         spacer()
-        tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ")
+        tip_type = input("Tip Type (Cash, Zelle, Gift Card…): ")
         spacer()
         desc = input("Description: ")
         spacer()
@@ -181,6 +183,7 @@ def add_tip(tips_jar, tip_id):
 
 
 def print_edit_options():
+    """Displays the edit options for user"""
     print("\n1. Date\n2. Apartment\n3. Tenant\n4. Amount\n5. Tip Type\n6. Description")
 
 
@@ -192,7 +195,7 @@ def validate_id(tips_jar):
             clear_screen()
             display_all_tips(tips_jar)
             wanted_id = input(
-                "\nInput a valid ID number thats on the list.\n\nID: "
+                "\nInput a valid ID number that's on the list.\n\nID: "
             ).strip()
         wanted_id = int(wanted_id)
 
@@ -200,7 +203,7 @@ def validate_id(tips_jar):
             break
         clear_screen()
         display_all_tips(tips_jar)
-        print("\nInput a valid ID number thats on the list.\n")
+        print("\nInput a valid ID number that's on the list.\n")
     return wanted_id
 
 
@@ -225,14 +228,14 @@ def edit_tip(tips_jar):
             print(f"\nYou are editing tip {wanted_id}.")
             tip = return_tip_from_id(wanted_id, tips_jar)
             print_edit_options()
-            wanted_field = input("\nField to edit(1-6): ")
+            wanted_field = input("\nField to edit (1 - 6): ")
             while not wanted_field.isdigit() or not 0 < int(wanted_field) < 7:
                 clear_screen()
                 reprint_all_tips(tips_jar)
                 print(f"\nYou are editing tip {wanted_id}.")
                 print_edit_options()
                 wanted_field = input(
-                    "\nInput a valid field number.\n\nField(1-6): "
+                    "\nInput a valid field number.\n\nField (1 - 6): "
                 ).strip()
             if int(wanted_field) == 1:
                 reprint_all_tips(tips_jar)
@@ -249,7 +252,7 @@ def edit_tip(tips_jar):
                 tip["Apartment"] = apt
             elif int(wanted_field) == 3:
                 reprint_all_tips(tips_jar)
-                tenant = input("\nTenant: ")
+                tenant = input("\nTenant Name: ")
                 tenant = clean_tenant(tenant)
                 tip["Tenant"] = tenant
             elif int(wanted_field) == 4:
@@ -261,7 +264,7 @@ def edit_tip(tips_jar):
                 tip["Amount"] = float(amnt)
             elif int(wanted_field) == 5:
                 reprint_all_tips(tips_jar)
-                tip_type = input("Tip Type(Cash, Zelle, Gift Card…): ")
+                tip_type = input("\nTip Type (Cash, Zelle, Gift Card…): ")
                 tip_type = clean_type(tip_type)
                 tip["Tip Type"] = tip_type
             elif int(wanted_field) == 6:
@@ -309,9 +312,8 @@ def display_all_tips(tips_jar):
     """Displays the tips in a certain format"""
     if len(tips_jar) == 0:
         print("\nThere are no tips yet.")
-        press_enter()
     else:
-        print("\n_TIPS_JAR_\n")
+        print("\nTip Jar\n")
         for tip in (
             tips_jar
         ):  # tip contains the tip information from a single dictionary each pass
@@ -334,7 +336,7 @@ def display_all_tips(tips_jar):
 def input_year():
     """Input the year to search tips"""
     year = input(
-        "\nInput year you'd like to search(YYYY)\n\n(Input back to return to menu)\n\n:"
+        "\nInput year you'd like to search (YYYY)\n\n(Input back to return to menu)\n\n:"
     ).strip()
     return year
 
@@ -345,7 +347,7 @@ def reinput_year(on_screen):
     display_all_tips(on_screen)
     year = (
         input(
-            "\nInput Valid Year.\n\nYear(YYYY):\n\n(Input back to return to menu)\n\n "
+            "\nInput Valid Year.\n\nYear (YYYY):\n\n(Input back to return to menu)\n\n "
         )
         .strip()
         .lower()
