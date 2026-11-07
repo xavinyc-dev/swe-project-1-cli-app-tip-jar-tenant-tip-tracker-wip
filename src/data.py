@@ -105,13 +105,14 @@ def remove_tip(wanted_id, tips_jar):
 
 
 def build_tip(tip_id, tenant, apt, amnt, tip_type, desc, date):
+    """Builds one tip dictionary and cleans the strings, date and amnt were cleaned on input to verify"""
     tip = {
         "ID": tip_id,
-        "Tenant": tenant.strip().title(),
+        "Date": date,
         "Apartment": apt.strip().title(),
+        "Tenant": tenant.strip().title(),
         "Amount": amnt,
         "Tip Type": tip_type.strip().title(),
         "Description": desc.strip(),
-        "Date": date,
     }
     return tip

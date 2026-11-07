@@ -280,7 +280,15 @@ def test_return_tip_from_id():
 
 
 def test_build_tip():
-    assert build_tip(1, "xavi", "1202W", 25.00, "zelle", "", "12-25-2025") == {
+    assert build_tip(
+        tip_id=1,
+        tenant="xavi",
+        apt="1202W",
+        amnt=25.00,
+        tip_type="zelle",
+        desc="",
+        date="12-25-2025",
+    ) == {
         "ID": 1,
         "Tenant": "Xavi",
         "Apartment": "1202W",

@@ -153,7 +153,15 @@ def add_tip(tips_jar, tip_id):
         desc = input("Description: ")
         spacer()
 
-        tip = build_tip(tip_id, tenant, apt, amnt, tip_type, desc, date)
+        tip = build_tip(
+            tip_id=tip_id,
+            tenant=tenant,
+            apt=apt,
+            amnt=amnt,
+            tip_type=tip_type,
+            desc=desc,
+            date=date,
+        )
 
         tips_jar.append(tip)
         tip_id += 1
